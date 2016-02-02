@@ -1,8 +1,17 @@
 #-*- encoding: utf-8 -*-
 
+MAX_ROW = 9
+MAX_COL = 8
+
 CODE_NAMES = [u'__', u'Kung-a', u'Cha-a', u'Po-a', u'Ma-a', u'Sang-a', u'Byung-a', u'Sa-a', u'Kung-b', u'Cha-b', u'Po-b', u'Ma-b', u'Sang-b', u'Sa-b', u'Jol-b']   # 나중에 추가
 #         0     1          2         3        4        5          6           7        8          9         10       11       12         13       14
 assert(len(CODE_NAMES) == 7 + 7 + 1)
+
+def is_valid_code(c):
+    return 0 <= c < len(CODE_NAMES)
+ 
+def is_valid_coordinates(r, c):
+    return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
 
 def code2name(c):
     ret = "[%7s]" % CODE_NAMES[c]
@@ -10,7 +19,6 @@ def code2name(c):
 
 def name2code(name):
     return CODE_NAMES.index(name)
-
 
 A_INITIAL_STATE = [
         (0, 0, 2),
