@@ -75,3 +75,19 @@ if __name__ == '__main__':
     for r, c in next_possible_coordinates(2, 2, byung_code):
         board[r][c] = 100
     print(board_state(board))
+
+    ma_code = name2code('Ma-a')
+    board = create_empty_board()
+    board[5][5] = ma_code
+    print("Ma-a can go to those coordinates from 5, 5: ")
+    for r, c in next_possible_coordinates(5, 5, ma_code):
+        board[r][c] = 100
+    print(board_state(board))
+
+    sang_code = name2code('Sang-a')
+    board = create_empty_board()
+    board[5][5] = sang_code
+    print("Ma-a can go to those coordinates from 5, 5: ")
+    for r, c in next_possible_coordinates(5, 5, sang_code):
+        board[r][c] = 100
+    print(board_state(board))
