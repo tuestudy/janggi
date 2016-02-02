@@ -8,6 +8,9 @@ def code2name(c):
     ret = "[%7s]" % CODE_NAMES[c]
     return ret
 
+def name2code(name):
+    return CODE_NAMES.index(name)
+
 
 A_INITIAL_STATE = [
         (0, 0, 2),

@@ -1,5 +1,5 @@
 #-*- encoding: utf-8 -*-
-from data import A_INITIAL_STATE, B_INITIAL_STATE, CODE_NAMES, code2name
+from data import A_INITIAL_STATE, B_INITIAL_STATE, CODE_NAMES, code2name, name2code
 
 
 class Janggi(object):
