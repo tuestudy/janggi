@@ -20,8 +20,10 @@ def is_valid_coordinates(r, c):
     return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
 
 def code2name(c):
-    ret = "[%7s]" % CODE_NAMES[c]
-    return ret
+    try:
+        return CODE_NAMES[c]
+    except: # 뭔지 모르면 X 라고 찍어보자
+        return "X"
 
 def name2code(name):
     return CODE_NAMES.index(name)
