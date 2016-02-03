@@ -38,9 +38,15 @@ def po_next_possible_coordinates(row, col):
 
 def item_next_possible_coordinates(name, row, col):
     candidates = []
-    for r, c in MOVES[name]:
-        candidates.append((row + r, col + c))
+    for r, c in MOVES[name.split('-')[0]]:
+        if is_valid_coordinates(row + r, col + c):
+            candidates.append((row + r, col + c))
     return candidates 
+
+def update_possible_coordinates(board, name, row, col, code):
+    print("{0} can go to those coordinates from {1}, {2}: ".format(name, row, col))
+    for r, c in next_possible_coordinates(row, col, code):
+        board[r][c] = 100
 
 if __name__ == '__main__':
     from helper import create_empty_board
@@ -60,34 +66,55 @@ if __name__ == '__main__':
         board[r][c] = 100
     print(board_state(board))
 
+    byung_code = name2code('Byung-a')
     jol_code = name2code('Jol-b')
     board = create_empty_board()
-    board[2][2] = jol_code
-    print("Jol-b can go to those coordinates from 2, 2: ")
-    for r, c in next_possible_coordinates(2, 2, jol_code):
-        board[r][c] = 100
-    print(board_state(board))
-
-    byung_code = name2code('Byung-a')
-    board = create_empty_board()
     board[2][2] = byung_code
-    print("Byung-a can go to those coordinates from 2, 2: ")
-    for r, c in next_possible_coordinates(2, 2, byung_code):
-        board[r][c] = 100
+    board[6][2] = jol_code
+    update_possible_coordinates(board, 'Byung-a', 2, 2, byung_code)
+    update_possible_coordinates(board, 'Jol-b', 6, 2, jol_code)
     print(board_state(board))
 
-    ma_code = name2code('Ma-a')
+    ma_a_code = name2code('Ma-a')
+    ma_b_code = name2code('Ma-b')
     board = create_empty_board()
-    board[5][5] = ma_code
-    print("Ma-a can go to those coordinates from 5, 5: ")
-    for r, c in next_possible_coordinates(5, 5, ma_code):
-        board[r][c] = 100
+    board[0][1] = ma_a_code
+    board[0][7] = ma_a_code
+    board[9][1] = ma_b_code
+    board[9][7] = ma_b_code
+    update_possible_coordinates(board, 'Ma-a', 0, 1, ma_a_code)
+    update_possible_coordinates(board, 'Ma-a', 0, 7, ma_a_code)
+    update_possible_coordinates(board, 'Ma-a', 9, 1, ma_b_code)
+    update_possible_coordinates(board, 'Ma-a', 9, 7, ma_b_code)
     print(board_state(board))
 
-    sang_code = name2code('Sang-a')
+    sang_a_code = name2code('Sang-a')
+    sang_b_code = name2code('Sang-b')
     board = create_empty_board()
-    board[5][5] = sang_code
-    print("Ma-a can go to those coordinates from 5, 5: ")
-    for r, c in next_possible_coordinates(5, 5, sang_code):
-        board[r][c] = 100
+    board[0][2] = sang_a_code
+    board[0][6] = sang_b_code
+    board[9][2] = sang_a_code
+    board[9][6] = sang_b_code
+    update_possible_coordinates(board, 'Sang-a', 0, 2, sang_a_code)
+    update_possible_coordinates(board, 'Sang-a', 0, 6, sang_a_code)
+    update_possible_coordinates(board, 'Sang-a', 9, 2, sang_b_code)
+    update_possible_coordinates(board, 'Sang-a', 9, 6, sang_b_code)
+    print(board_state(board))
+
+    kung_a_code = name2code('Kung-a')
+    kung_b_code = name2code('Kung-b')
+    board = create_empty_board()
+    board[1][4] = kung_a_code
+    board[8][4] = kung_b_code
+    update_possible_coordinates(board, 'Kung-a', 1, 4, kung_a_code)
+    update_possible_coordinates(board, 'Kung-b', 8, 4, kung_b_code)
+    print(board_state(board))
+
+    sa_a_code = name2code('Sa-a')
+    sa_b_code = name2code('Sa-b')
+    board = create_empty_board()
+    board[1][4] = sa_a_code
+    board[8][4] = sa_b_code
+    update_possible_coordinates(board, 'Sa-a', 1, 4, sa_a_code)
+    update_possible_coordinates(board, 'Sa-b', 8, 4, sa_b_code)
     print(board_state(board))
