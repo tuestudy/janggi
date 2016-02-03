@@ -92,8 +92,8 @@ if __name__ == '__main__':
     sang_b_code = name2code('Sang-b')
     board = create_empty_board()
     board[0][2] = sang_a_code
-    board[0][6] = sang_b_code
-    board[9][2] = sang_a_code
+    board[0][6] = sang_a_code
+    board[9][2] = sang_b_code
     board[9][6] = sang_b_code
     update_possible_coordinates(board, 'Sang-a', 0, 2, sang_a_code)
     update_possible_coordinates(board, 'Sang-a', 0, 6, sang_a_code)
