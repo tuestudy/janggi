@@ -1,4 +1,5 @@
 #-*- encoding: utf-8 -*-
+import enum
 
 MAX_ROW = 9
 MAX_COL = 8
@@ -9,92 +10,123 @@ MAX_COL = 8
   * B 가 하단(Row 가 큰 쪽)
 """
 
-CODE_NAMES = [u'__', u'Kung-a', u'Cha-a', u'Po-a', u'Ma-a', u'Sang-a', u'Byung-a', u'Sa-a', u'Kung-b', u'Cha-b', u'Po-b', u'Ma-b', u'Sang-b', u'Sa-b', u'Jol-b']   # 나중에 추가
-#         0     1          2         3        4        5          6           7        8          9         10       11       12         13       14
-assert(len(CODE_NAMES) == 7 + 7 + 1)
+class PieceType(enum.IntEnum):
+    Kung, Cha, Po, Ma, Sang, Sa, Byung, Jol = range(1, 9)
+
+class Piece(enum.IntEnum):
+    __ = 0
+    Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Byung_a, Sa_a = range(1, 8)
+    Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
+
+CODE_NAMES = [p.name.replace('_', '-') if p else p.name for p in Piece]
+
+Piece.Kung_a.piece_type = PieceType.Kung
+Piece.Kung_b.piece_type = PieceType.Kung
+Piece.Cha_a.piece_type = PieceType.Cha
+Piece.Cha_b.piece_type = PieceType.Cha
+Piece.Po_a.piece_type = PieceType.Po
+Piece.Po_b.piece_type = PieceType.Po
+Piece.Ma_a.piece_type = PieceType.Ma
+Piece.Ma_b.piece_type = PieceType.Ma
+Piece.Sang_a.piece_type = PieceType.Sang
+Piece.Sang_b.piece_type = PieceType.Sang
+Piece.Byung_a.piece_type = PieceType.Byung
+# Piece.Sa_b.piece_type = PieceType.?
+# Piece.Sa_a.piece_type = PieceType.?
+Piece.Jol_b.piece_type = PieceType.Jol
+
+
+assert len(CODE_NAMES) == 7 + 7 + 1
 
 def is_valid_code(c):
-    return 0 <= c < len(CODE_NAMES)
+    try:
+        Piece(c)
+        return True
+    except ValueError:
+        return False
  
 def is_valid_coordinates(r, c):
     return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
 
 def code2name(c):
     try:
-        return CODE_NAMES[c]
-    except: # 뭔지 모르면 X 라고 찍어보자
-        return "X"
+        name = Piece(c).name
+        return name.replace('_', '-') if c else name
+    except ValueError:
+        return 'X'
 
 def name2code(name):
-    return CODE_NAMES.index(name)
+    return getattr(Piece, name.replace('-', '_')).value
+
 
 A_INITIAL_STATE = [
-        (0, 0, 2),
-        (0, 1, 4),
-        (0, 2, 5),
-        (0, 3, 7),
-        (0, 5, 7),
-        (0, 6, 5),
-        (0, 7, 4),
-        (0, 8, 2),
-        (1, 4, 1),
-        (2, 1, 3),
-        (2, 7, 3),
-        (3, 0, 6),
-        (3, 2, 6),
-        (3, 4, 6),
-        (3, 6, 6),
-        (3, 8, 6),
+    (0, 0, Piece.Cha_a),
+    (0, 1, Piece.Ma_a),
+    (0, 2, Piece.Sang_a),
+    (0, 3, Piece.Sa_a),
+    (0, 5, Piece.Sa_a),
+    (0, 6, Piece.Sang_a),
+    (0, 7, Piece.Ma_a),
+    (0, 8, Piece.Cha_a),
+    (1, 4, Piece.Kung_a),
+    (2, 1, Piece.Po_a),
+    (2, 7, Piece.Po_a),
+    (3, 0, Piece.Byung_a),
+    (3, 2, Piece.Byung_a),
+    (3, 4, Piece.Byung_a),
+    (3, 6, Piece.Byung_a),
+    (3, 8, Piece.Byung_a),
 ]
 
 B_INITIAL_STATE = [
-        (9, 0, 9),
-        (9, 1, 12),
-        (9, 2, 11),
-        (9, 3, 13),
-        (9, 5, 13),
-        (9, 6, 11),
-        (9, 7, 12),
-        (9, 8, 9),
-        (8, 4, 8),
-        (7, 1, 10),
-        (7, 7, 10),
-        (6, 0, 14),
-        (6, 2, 14),
-        (6, 4, 14),
-        (6, 6, 14),
-        (6, 8, 14),
+    (9, 0, Piece.Cha_b),
+    (9, 1, Piece.Sang_b),
+    (9, 2, Piece.Ma_b),
+    (9, 3, Piece.Sa_b),
+    (9, 5, Piece.Sa_b),
+    (9, 6, Piece.Ma_b),
+    (9, 7, Piece.Sang_b),
+    (9, 8, Piece.Cha_b),
+    (8, 4, Piece.Kung_b),
+    (7, 1, Piece.Po_b),
+    (7, 7, Piece.Po_b),
+    (6, 0, Piece.Jol_b),
+    (6, 2, Piece.Jol_b),
+    (6, 4, Piece.Jol_b),
+    (6, 6, Piece.Jol_b),
+    (6, 8, Piece.Jol_b),
 ]
 
 MOVES = {
-    u'Kung' : [
+    PieceType.Kung : [
         (-1, -1), (-1,  0), (-1,  1),
         ( 0, -1),           ( 0,  1),
         ( 1,  1), ( 1,  0), ( 1, -1)
               ],
-    u'Sa'   : [
+    PieceType.Sa   : [
         (-1, -1), (-1,  0), (-1,  1),
         ( 0, -1),           ( 0,  1),
         ( 1,  1), ( 1,  0), ( 1, -1)
               ],
-    u'Sang' : [
+    PieceType.Sang : [
             (-3, -2), (-3,  2),
         (-2, -3),        (-2,  3),
         ( 2, -3),        ( 2,  3),
             ( 3, -2), ( 3,  2)
               ],
-    u'Ma'   : [
+    PieceType.Ma   : [
             (-1, -2), (-1,  2),
         (-2, -1),        (-2,  1),
         ( 1, -2),        ( 1,  2),
             ( 2, -1), ( 2,  1)
               ],
-    u'Byung': [
+    PieceType.Byung: [
                   ( 1,  0),
         ( 0, -1),            ( 0,  1)
               ],
-    u'Jol':   [
+    PieceType.Jol:   [
                   (-1,  0),
         ( 0, -1),            ( 0,  1)
               ]
 }
+MOVES = {pt.name: moves for pt, moves in MOVES.items()}
