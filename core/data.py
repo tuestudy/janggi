@@ -3,6 +3,12 @@
 MAX_ROW = 9
 MAX_COL = 8
 
+"""
+  졸/병이 움직이는 방향을 정할 때 진영 정보가 필요함
+  * A 가 상단(Row 가 작은 쪽)
+  * B 가 하단(Row 가 큰 쪽)
+"""
+
 CODE_NAMES = [u'__', u'Kung-a', u'Cha-a', u'Po-a', u'Ma-a', u'Sang-a', u'Byung-a', u'Sa-a', u'Kung-b', u'Cha-b', u'Po-b', u'Ma-b', u'Sang-b', u'Sa-b', u'Jol-b']   # 나중에 추가
 #         0     1          2         3        4        5          6           7        8          9         10       11       12         13       14
 assert(len(CODE_NAMES) == 7 + 7 + 1)
@@ -14,8 +20,10 @@ def is_valid_coordinates(r, c):
     return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
 
 def code2name(c):
-    ret = "[%7s]" % CODE_NAMES[c]
-    return ret
+    try:
+        return CODE_NAMES[c]
+    except: # 뭔지 모르면 X 라고 찍어보자
+        return "X"
 
 def name2code(name):
     return CODE_NAMES.index(name)
@@ -58,3 +66,35 @@ B_INITIAL_STATE = [
         (6, 8, 14),
 ]
 
+MOVES = {
+    u'Kung' : [
+        (-1, -1), (-1,  0), (-1,  1),
+        ( 0, -1),           ( 0,  1),
+        ( 1,  1), ( 1,  0), ( 1, -1)
+              ],
+    u'Sa'   : [
+        (-1, -1), (-1,  0), (-1,  1),
+        ( 0, -1),           ( 0,  1),
+        ( 1,  1), ( 1,  0), ( 1, -1)
+              ],
+    u'Sang' : [
+            (-3, -2), (-3,  2),
+        (-2, -3),        (-2,  3),
+        ( 2, -3),        ( 2,  3),
+            ( 3, -2), ( 3,  2)
+              ],
+    u'Ma'   : [
+            (-1, -2), (-1,  2),
+        (-2, -1),        (-2,  1),
+        ( 1, -2),        ( 1,  2),
+            ( 2, -1), ( 2,  1)
+              ],
+    u'Byung': [
+                  ( 1,  0),
+        ( 0, -1),            ( 0,  1)
+              ],
+    u'Jol':   [
+                  (-1,  0),
+        ( 0, -1),            ( 0,  1)
+              ]
+}
