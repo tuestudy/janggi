@@ -17,3 +17,17 @@ source /usr/local/bin/virtualenvwrapper.sh`
 6. `workon janggi` 로 어디 디렉토리에서 치시던 바로 가상환경으로 들어갈 수 있습니다.
 
 파이썬 3를 사용합니다.  파이썬 환경은 각자 알아서 준비합니다.
+
+
+## UI demo
+
+\*NIX:
+
+`PYTHONPATH=.:janggi/core python -m janggi.gui.demo`
+
+Windows:
+
+```
+SET PYTHONPATH=.;janggi\core
+python -m janggi.gui.demo
+```
