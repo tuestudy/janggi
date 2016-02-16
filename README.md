@@ -21,9 +21,20 @@ source /usr/local/bin/virtualenvwrapper.sh`
 
 ## UI demo
 
+Install requirements:
+
+```
+pip install -r requirements.txt
+```
+
+
+---
+
 \*NIX:
 
-`PYTHONPATH=.:janggi/core python -m janggi.gui.demo`
+```
+PYTHONPATH=.:janggi/core python -m janggi.gui.demo
+```
 
 Windows:
 
