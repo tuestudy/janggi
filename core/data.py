@@ -15,7 +15,7 @@ class PieceType(enum.IntEnum):
 
 class Piece(enum.IntEnum):
     __ = 0
-    Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Byung_a, Sa_a = range(1, 8)
+    Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Byung_a = range(1, 8)
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
 
 CODE_NAMES = [p.name.replace('_', '-') if p else p.name for p in Piece]
@@ -31,9 +31,9 @@ Piece.Ma_b.piece_type = PieceType.Ma
 Piece.Sang_a.piece_type = PieceType.Sang
 Piece.Sang_b.piece_type = PieceType.Sang
 Piece.Byung_a.piece_type = PieceType.Byung
-# Piece.Sa_b.piece_type = PieceType.?
-# Piece.Sa_a.piece_type = PieceType.?
 Piece.Jol_b.piece_type = PieceType.Jol
+Piece.Sa_a.piece_type = PieceType.Sa
+Piece.Sa_b.piece_type = PieceType.Sa
 
 
 assert len(CODE_NAMES) == 7 + 7 + 1
