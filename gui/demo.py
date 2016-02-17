@@ -68,11 +68,15 @@ class ScrollableCanvas(Frame):
         xscrollbar.config(command=canvas.xview)
         yscrollbar.config(command=canvas.yview)
 
+    @staticmethod
+    def scroll_direction(event):
+        return -1 if event.num == 4 or event.delta > 0 else +1
+
     def on_vertical_scroll(self, event):
-        self.canvas.yview_scroll(-1 if event.num == 4 else +1, 'units')
+        self.canvas.yview_scroll(self.scroll_direction(event), 'units')
 
     def on_horizontal_scroll(self, event):
-        self.canvas.xview_scroll(-1 if event.num == 4 else +1, 'units')
+        self.canvas.xview_scroll(self.scroll_direction(event), 'units')
 
 
 root = Tk()
