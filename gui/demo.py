@@ -15,6 +15,8 @@ MARGIN_TOP = MARGIN_LEFT = 50
 CELL_SIZE = 100
 BOARD_WIDTH = CELL_SIZE * (VERTICAL_LINES - 1)
 BOARD_HEIGHT = CELL_SIZE * (HORIZONTAL_LINES - 1)
+CANVAS_WIDTH = BOARD_WIDTH + 2 * MARGIN_LEFT
+CANVAS_HEIGHT = BOARD_HEIGHT + 2 * MARGIN_TOP
 
 janggi = Janggi()
 janggi.reset()
@@ -38,14 +40,50 @@ images = {
 }
 
 
+class ScrollableCanvas(Frame):
+
+    def __init__(self, master, width, height, *args, **kwargs):
+        Frame.__init__(self, master, bd=2, relief=SUNKEN)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
+        xscrollbar = Scrollbar(self, orient=HORIZONTAL)
+        xscrollbar.grid(row=1, column=0, sticky=E+W)
+        yscrollbar = Scrollbar(self)
+        yscrollbar.grid(row=0, column=1, sticky=N+S)
+        canvas = self.canvas = Canvas(
+            self, *args, bd=0,
+            xscrollcommand=xscrollbar.set,
+            yscrollcommand=yscrollbar.set,
+            width=width, height=height,
+            **kwargs)
+        canvas.grid(row=0, column=0, sticky=N+S+E+W)
+        canvas.config(scrollregion=(0, 0, width, height))
+        canvas.bind_all('<MouseWheel>', self.on_vertical_scroll)
+        canvas.bind_all('<Button-4>', self.on_vertical_scroll)
+        canvas.bind_all('<Button-5>', self.on_vertical_scroll)
+        canvas.bind_all('<Shift-MouseWheel>', self.on_horizontal_scroll)
+        canvas.bind_all('<Shift-Button-4>', self.on_horizontal_scroll)
+        canvas.bind_all('<Shift-Button-5>', self.on_horizontal_scroll)
+        xscrollbar.config(command=canvas.xview)
+        yscrollbar.config(command=canvas.yview)
+
+    def on_vertical_scroll(self, event):
+        self.canvas.yview_scroll(-1 if event.num == 4 else +1, 'units')
+
+    def on_horizontal_scroll(self, event):
+        self.canvas.xview_scroll(-1 if event.num == 4 else +1, 'units')
+
+
 root = Tk()
+
 photoimages = {
     piece: ImageTk.PhotoImage(file=resource_dir / (filename + '.png'))
     for piece, filename in images.items()
 }
-canvas = Canvas(root, background='#F7931E')
-canvas.pack(expand=TRUE, fill=BOTH)
-
+sc = ScrollableCanvas(root, CANVAS_WIDTH, CANVAS_HEIGHT, background='#F7931E')
+sc.pack(expand=TRUE, fill=BOTH)
+canvas = sc.canvas
 
 # hotizontal lines
 for i in range(HORIZONTAL_LINES):
@@ -80,8 +118,6 @@ for i, row in enumerate(janggi.board):
             MARGIN_TOP + i * CELL_SIZE,
             image=photoimages[piece])
 
-root.geometry('{}x{}'.format(
-    BOARD_WIDTH + 2 * MARGIN_LEFT,
-    BOARD_HEIGHT + 2 * MARGIN_TOP))
+root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.mainloop()
