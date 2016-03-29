@@ -7,6 +7,7 @@ from PIL import ImageTk, Image
 
 from ..core.data import Piece
 from ..core.janggi import Janggi
+from ..core.rule import next_possible_coordinates
 
 
 HORIZONTAL_LINES = 10
@@ -55,6 +56,8 @@ class JanggiBoard(Canvas):
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
+        self.bind('<Button-1>', self.show_candidates)
+        self.bind('<ButtonRelease-1>', self.remove_candidates)
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -94,6 +97,22 @@ class JanggiBoard(Canvas):
     def draw(self, board):
         b.delete('piece')
         self.put_pieces(board)
+
+    def show_candidates(self, e):
+        # TODO: Get position, piece
+        x, y, code = 0, 0, Piece.Cha_a.value
+        for i, j in next_possible_coordinates(x, y, code):
+            self.create_oval(
+                MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
+                MARGIN_LEFT + i * CELL_SIZE - CELL_SIZE // 4,
+                MARGIN_LEFT + j * CELL_SIZE + (CELL_SIZE // 4),
+                MARGIN_LEFT + i * CELL_SIZE + (CELL_SIZE // 4),
+                outline='green',  # fill='red',
+                tags='candidate')
+
+    def remove_candidates(self, e):
+        self.delete('candidate')
+
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
