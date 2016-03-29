@@ -12,7 +12,7 @@ from ..core.janggi import Janggi
 HORIZONTAL_LINES = 10
 VERTICAL_LINES = 9
 MARGIN_TOP = MARGIN_LEFT = 50
-CELL_SIZE = 100
+CELL_SIZE = 50
 BOARD_WIDTH = CELL_SIZE * (VERTICAL_LINES - 1)
 BOARD_HEIGHT = CELL_SIZE * (HORIZONTAL_LINES - 1)
 CANVAS_WIDTH = BOARD_WIDTH + 2 * MARGIN_LEFT
@@ -82,7 +82,7 @@ class ScrollableCanvas(Frame):
 root = Tk()
 
 photoimages = {
-    piece: ImageTk.PhotoImage(file=resource_dir / (filename + '.png'))
+    piece: ImageTk.PhotoImage(file=resource_dir / (filename + '_small.png'))
     for piece, filename in images.items()
 }
 sc = ScrollableCanvas(root, CANVAS_WIDTH, CANVAS_HEIGHT, background='#F7931E')
