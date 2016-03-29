@@ -42,46 +42,60 @@ images = {
 
 root = Tk()
 
-photoimages = {
-    piece: ImageTk.PhotoImage(file=resource_dir / (filename + '_small.png'))
-    for piece, filename in images.items()
-}
-canvas = Canvas(root, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, background='#F7931E')
-canvas.pack(expand=TRUE, fill=BOTH)
 
-# hotizontal lines
-for i in range(HORIZONTAL_LINES):
-    y = MARGIN_TOP + i * CELL_SIZE
-    canvas.create_line(MARGIN_LEFT, y, MARGIN_LEFT + BOARD_WIDTH, y)
-# vertical lines
-for i in range(VERTICAL_LINES):
-    x = MARGIN_LEFT + i * CELL_SIZE
-    canvas.create_line(x, MARGIN_TOP, x, MARGIN_TOP + BOARD_HEIGHT)
+class JanggiBoard(Canvas):
+    photoimages = {
+        piece: ImageTk.PhotoImage(file=resource_dir / (filename + '_small.png'))
+        for piece, filename in images.items()
+    }
+    def __init__(self, *args, **kwargs):
+        Canvas.__init__(self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT, background='#F7931E', *args, **kwargs)
+        self.draw_hlines()
+        self.draw_vlines()
+        self.draw_palaces()
 
-# palaces
-for i in (0, 7):
-    y = MARGIN_TOP + i * CELL_SIZE
-    canvas.create_line(
-        MARGIN_LEFT + 3 * CELL_SIZE,
-        y,
-        MARGIN_LEFT + 5 * CELL_SIZE,
-        y + 2 * CELL_SIZE)
-    canvas.create_line(
-        MARGIN_LEFT + 5 * CELL_SIZE,
-        y,
-        MARGIN_LEFT + 3 * CELL_SIZE,
-        y + 2 * CELL_SIZE)
+    def draw_hlines(self):
+        for i in range(HORIZONTAL_LINES):
+            y = MARGIN_TOP + i * CELL_SIZE
+            self.create_line(MARGIN_LEFT, y, MARGIN_LEFT + BOARD_WIDTH, y)
 
-# pieces
-for i, row in enumerate(janggi.board):
-    for j, piece in enumerate(row):
-        if not piece:
-            continue
-        canvas.create_image(
-            MARGIN_LEFT + j * CELL_SIZE,
-            MARGIN_TOP + i * CELL_SIZE,
-            image=photoimages[piece])
+    def draw_vlines(self):
+        for i in range(VERTICAL_LINES):
+            x = MARGIN_LEFT + i * CELL_SIZE
+            self.create_line(x, MARGIN_TOP, x, MARGIN_TOP + BOARD_HEIGHT)
 
+    def draw_palaces(self):
+        for i in (0, 7):
+            y = MARGIN_TOP + i * CELL_SIZE
+            self.create_line(
+                MARGIN_LEFT + 3 * CELL_SIZE,
+                y,
+                MARGIN_LEFT + 5 * CELL_SIZE,
+                y + 2 * CELL_SIZE)
+            self.create_line(
+                MARGIN_LEFT + 5 * CELL_SIZE,
+                y,
+                MARGIN_LEFT + 3 * CELL_SIZE,
+                y + 2 * CELL_SIZE)
+
+    def put_pieces(self, board):
+        for i, row in enumerate(board):
+            for j, piece in enumerate(row):
+                if not piece:
+                    continue
+                self.create_image(
+                    MARGIN_LEFT + j * CELL_SIZE,
+                    MARGIN_TOP + i * CELL_SIZE,
+                    image=self.photoimages[piece],
+                    tags='piece')
+
+    def draw(self, board):
+        b.delete('piece')
+        self.put_pieces(board)
+
+b = JanggiBoard()
+b.pack(expand=TRUE, fill=BOTH)
+b.draw(janggi.board)
 root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.mainloop()
