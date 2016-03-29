@@ -84,12 +84,12 @@ class JanggiBoard(Canvas):
             self.create_line(
                 MARGIN_LEFT + 3 * CELL_SIZE,
                 y,
-                MARGIN_LEFT + 5 * CELL_SIZE,
+                MARGIN_TOP + 5 * CELL_SIZE,
                 y + 2 * CELL_SIZE)
             self.create_line(
                 MARGIN_LEFT + 5 * CELL_SIZE,
                 y,
-                MARGIN_LEFT + 3 * CELL_SIZE,
+                MARGIN_TOP + 3 * CELL_SIZE,
                 y + 2 * CELL_SIZE)
 
     def put_pieces(self, board):
@@ -119,9 +119,9 @@ class JanggiBoard(Canvas):
         for i, j in next_possible_coordinates(x, y, p):
             self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
-                MARGIN_LEFT + i * CELL_SIZE - CELL_SIZE // 4,
+                MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_LEFT + j * CELL_SIZE + (CELL_SIZE // 4),
-                MARGIN_LEFT + i * CELL_SIZE + (CELL_SIZE // 4),
+                MARGIN_TOP + i * CELL_SIZE + (CELL_SIZE // 4),
                 outline='green',  # fill='red',
                 tags='candidate')
 
