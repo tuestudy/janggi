@@ -3,7 +3,7 @@
 from pathlib import Path
 from tkinter import *  # noqa
 
-from PIL import ImageTk
+from PIL import ImageTk, Image
 
 from ..core.data import Piece
 from ..core.janggi import Janggi
@@ -45,7 +45,9 @@ root = Tk()
 
 class JanggiBoard(Canvas):
     photoimages = {
-        piece: ImageTk.PhotoImage(file=resource_dir / (filename + '_small.png'))
+        piece: ImageTk.PhotoImage(Image.open(
+            resource_dir / (filename + '.png')
+        ).resize((60, 54)))
         for piece, filename in images.items()
     }
     def __init__(self, *args, **kwargs):
