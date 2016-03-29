@@ -58,6 +58,7 @@ class JanggiBoard(Canvas):
         self.draw_palaces()
         self.bind('<Button-1>', self.show_candidates)
         self.bind('<ButtonRelease-1>', self.remove_candidates)
+        self.bind('<Button1-Motion>', self.move_piece)
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -99,6 +100,8 @@ class JanggiBoard(Canvas):
         self.put_pieces(board)
 
     def show_candidates(self, e):
+        self.x, self.y = e.x, e.y
+        self.piece_to_move = self.find_closest(e.x, e.y)
         # TODO: Get position, piece
         x, y, code = 0, 0, Piece.Cha_a.value
         for i, j in next_possible_coordinates(x, y, code):
@@ -112,6 +115,10 @@ class JanggiBoard(Canvas):
 
     def remove_candidates(self, e):
         self.delete('candidate')
+
+    def move_piece(self, e):
+        self.move(self.piece_to_move, e.x - self.x, e.y - self.y)
+        self.x, self.y = e.x, e.y
 
 
 b = JanggiBoard()
