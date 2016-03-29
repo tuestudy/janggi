@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from collections import namedtuple
 from pathlib import Path
 from tkinter import *  # noqa
 
@@ -44,6 +45,9 @@ images = {
 root = Tk()
 
 
+PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
+
+
 class JanggiBoard(Canvas):
     photoimages = {
         piece: ImageTk.PhotoImage(Image.open(
@@ -51,8 +55,12 @@ class JanggiBoard(Canvas):
         ).resize((60, 54)))
         for piece, filename in images.items()
     }
+
     def __init__(self, *args, **kwargs):
-        Canvas.__init__(self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT, background='#F7931E', *args, **kwargs)
+        Canvas.__init__(
+            self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
+            background='#F7931E', *args, **kwargs
+        )
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
@@ -85,15 +93,17 @@ class JanggiBoard(Canvas):
                 y + 2 * CELL_SIZE)
 
     def put_pieces(self, board):
+        d = self.pieces = {}  # Map canvas item -> PieceInfo(row, col, piece)
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if not piece:
                     continue
-                self.create_image(
+                item = self.create_image(
                     MARGIN_LEFT + j * CELL_SIZE,
                     MARGIN_TOP + i * CELL_SIZE,
                     image=self.photoimages[piece],
                     tags='piece')
+                d[item] = PieceInfo(row=i, col=j, piece=piece)
 
     def draw(self, board):
         b.delete('piece')
@@ -103,9 +113,10 @@ class JanggiBoard(Canvas):
         self.x, self.y = e.x, e.y
         self.piece_to_move = self.find_closest(e.x, e.y)
         self.tag_raise(self.piece_to_move)
-        # TODO: Get position, piece
-        x, y, code = 0, 0, Piece.Cha_a.value
-        for i, j in next_possible_coordinates(x, y, code):
+        if not self.piece_to_move:
+            return
+        x, y, p = self.pieces[self.piece_to_move[0]]
+        for i, j in next_possible_coordinates(x, y, p):
             self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_LEFT + i * CELL_SIZE - CELL_SIZE // 4,
