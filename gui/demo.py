@@ -102,6 +102,7 @@ class JanggiBoard(Canvas):
     def show_candidates(self, e):
         self.x, self.y = e.x, e.y
         self.piece_to_move = self.find_closest(e.x, e.y)
+        self.tag_raise(self.piece_to_move)
         # TODO: Get position, piece
         x, y, code = 0, 0, Piece.Cha_a.value
         for i, j in next_possible_coordinates(x, y, code):
