@@ -40,54 +40,14 @@ images = {
 }
 
 
-class ScrollableCanvas(Frame):
-
-    def __init__(self, master, width, height, *args, **kwargs):
-        Frame.__init__(self, master, bd=2, relief=SUNKEN)
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        xscrollbar = Scrollbar(self, orient=HORIZONTAL)
-        xscrollbar.grid(row=1, column=0, sticky=E+W)
-        yscrollbar = Scrollbar(self)
-        yscrollbar.grid(row=0, column=1, sticky=N+S)
-        canvas = self.canvas = Canvas(
-            self, *args, bd=0,
-            xscrollcommand=xscrollbar.set,
-            yscrollcommand=yscrollbar.set,
-            width=width, height=height,
-            **kwargs)
-        canvas.grid(row=0, column=0, sticky=N+S+E+W)
-        canvas.config(scrollregion=(0, 0, width, height))
-        canvas.bind_all('<MouseWheel>', self.on_vertical_scroll)
-        canvas.bind_all('<Button-4>', self.on_vertical_scroll)
-        canvas.bind_all('<Button-5>', self.on_vertical_scroll)
-        canvas.bind_all('<Shift-MouseWheel>', self.on_horizontal_scroll)
-        canvas.bind_all('<Shift-Button-4>', self.on_horizontal_scroll)
-        canvas.bind_all('<Shift-Button-5>', self.on_horizontal_scroll)
-        xscrollbar.config(command=canvas.xview)
-        yscrollbar.config(command=canvas.yview)
-
-    @staticmethod
-    def scroll_direction(event):
-        return -1 if event.num == 4 or event.delta > 0 else +1
-
-    def on_vertical_scroll(self, event):
-        self.canvas.yview_scroll(self.scroll_direction(event), 'units')
-
-    def on_horizontal_scroll(self, event):
-        self.canvas.xview_scroll(self.scroll_direction(event), 'units')
-
-
 root = Tk()
 
 photoimages = {
     piece: ImageTk.PhotoImage(file=resource_dir / (filename + '_small.png'))
     for piece, filename in images.items()
 }
-sc = ScrollableCanvas(root, CANVAS_WIDTH, CANVAS_HEIGHT, background='#F7931E')
-sc.pack(expand=TRUE, fill=BOTH)
-canvas = sc.canvas
+canvas = Canvas(root, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, background='#F7931E')
+canvas.pack(expand=TRUE, fill=BOTH)
 
 # hotizontal lines
 for i in range(HORIZONTAL_LINES):
