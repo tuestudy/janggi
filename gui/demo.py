@@ -112,10 +112,12 @@ class JanggiBoard(Canvas):
     def show_candidates(self, e):
         self.x, self.y = e.x, e.y
         self.piece_to_move = self.find_closest(e.x, e.y)
-        self.tag_raise(self.piece_to_move)
-        if not self.piece_to_move:
+        try:
+            x, y, p = self.pieces[self.piece_to_move[0]]
+        except KeyError:
+            self.piece_to_move = None
             return
-        x, y, p = self.pieces[self.piece_to_move[0]]
+        self.tag_raise(self.piece_to_move)
         for i, j in next_possible_coordinates(x, y, p):
             self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
@@ -129,6 +131,8 @@ class JanggiBoard(Canvas):
         self.delete('candidate')
 
     def move_piece(self, e):
+        if not self.piece_to_move:
+            return
         self.move(self.piece_to_move, e.x - self.x, e.y - self.y)
         self.x, self.y = e.x, e.y
 
