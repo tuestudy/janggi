@@ -1,12 +1,14 @@
 # coding: utf-8
 
+from collections import namedtuple
 from pathlib import Path
 from tkinter import *  # noqa
 
-from PIL import ImageTk
+from PIL import ImageTk, Image
 
 from ..core.data import Piece
 from ..core.janggi import Janggi
+from ..core.rule import next_possible_coordinates
 
 
 HORIZONTAL_LINES = 10
@@ -43,16 +45,28 @@ images = {
 root = Tk()
 
 
+PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
+
+
 class JanggiBoard(Canvas):
     photoimages = {
-        piece: ImageTk.PhotoImage(file=resource_dir / (filename + '_small.png'))
+        piece: ImageTk.PhotoImage(Image.open(
+            resource_dir / (filename + '.png')
+        ).resize((60, 54)))
         for piece, filename in images.items()
     }
+
     def __init__(self, *args, **kwargs):
-        Canvas.__init__(self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT, background='#F7931E', *args, **kwargs)
+        Canvas.__init__(
+            self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
+            background='#F7931E', *args, **kwargs
+        )
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
+        self.bind('<Button-1>', self.show_candidates)
+        self.bind('<ButtonRelease-1>', self.remove_candidates)
+        self.bind('<Button1-Motion>', self.move_piece)
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -70,28 +84,58 @@ class JanggiBoard(Canvas):
             self.create_line(
                 MARGIN_LEFT + 3 * CELL_SIZE,
                 y,
-                MARGIN_LEFT + 5 * CELL_SIZE,
+                MARGIN_TOP + 5 * CELL_SIZE,
                 y + 2 * CELL_SIZE)
             self.create_line(
                 MARGIN_LEFT + 5 * CELL_SIZE,
                 y,
-                MARGIN_LEFT + 3 * CELL_SIZE,
+                MARGIN_TOP + 3 * CELL_SIZE,
                 y + 2 * CELL_SIZE)
 
     def put_pieces(self, board):
+        d = self.pieces = {}  # Map canvas item -> PieceInfo(row, col, piece)
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if not piece:
                     continue
-                self.create_image(
+                item = self.create_image(
                     MARGIN_LEFT + j * CELL_SIZE,
                     MARGIN_TOP + i * CELL_SIZE,
                     image=self.photoimages[piece],
                     tags='piece')
+                d[item] = PieceInfo(row=i, col=j, piece=piece)
 
     def draw(self, board):
         b.delete('piece')
         self.put_pieces(board)
+
+    def show_candidates(self, e):
+        self.x, self.y = e.x, e.y
+        self.piece_to_move = self.find_closest(e.x, e.y)
+        try:
+            x, y, p = self.pieces[self.piece_to_move[0]]
+        except KeyError:
+            self.piece_to_move = None
+            return
+        self.tag_raise(self.piece_to_move)
+        for i, j in next_possible_coordinates(x, y, p):
+            self.create_oval(
+                MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
+                MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
+                MARGIN_LEFT + j * CELL_SIZE + (CELL_SIZE // 4),
+                MARGIN_TOP + i * CELL_SIZE + (CELL_SIZE // 4),
+                outline='green',  # fill='red',
+                tags='candidate')
+
+    def remove_candidates(self, e):
+        self.delete('candidate')
+
+    def move_piece(self, e):
+        if not self.piece_to_move:
+            return
+        self.move(self.piece_to_move, e.x - self.x, e.y - self.y)
+        self.x, self.y = e.x, e.y
+
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)

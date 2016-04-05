@@ -33,12 +33,12 @@ pip install -r requirements.txt
 \*NIX:
 
 ```
-PYTHONPATH=.:janggi/core python -m janggi.gui.demo
+PYTHONPATH=..:core python -m janggi.gui.demo
 ```
 
 Windows:
 
 ```
-SET PYTHONPATH=.;janggi\core
+SET PYTHONPATH=..;core
 python -m janggi.gui.demo
 ```
