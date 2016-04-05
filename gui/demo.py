@@ -95,7 +95,7 @@ class JanggiBoard(Canvas):
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
-b.draw(janggi.board)
+janggi.boardState.subscribe(lambda state: b.draw(janggi.board))
 root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.mainloop()
