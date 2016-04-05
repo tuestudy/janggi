@@ -21,7 +21,6 @@ CANVAS_WIDTH = BOARD_WIDTH + 2 * MARGIN_LEFT
 CANVAS_HEIGHT = BOARD_HEIGHT + 2 * MARGIN_TOP
 
 janggi = Janggi()
-janggi.reset()
 
 resource_dir = Path(__file__).resolve().parent / 'resource'
 images = {
@@ -140,6 +139,22 @@ class JanggiBoard(Canvas):
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
 janggi.boardState.subscribe(lambda state: b.draw(janggi.board))
+janggi.reset()
+
+def modify():
+    board = janggi.board
+    board[0][0] = 0
+    janggi.board = board
+
+def modify2():
+    board = janggi.board
+    board[0][2] = 0
+    janggi.board = board
+
+# janggi.board 에 새 값을 넣으면 b.draw 부른다
+
+root.after(1000, modify)
+root.after(2000, modify2)
 root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.mainloop()

@@ -14,9 +14,10 @@ class Janggi(object):
         return board_state(self.board)
 
     def reset(self):
-        self.board = create_empty_board()
+        board = create_empty_board()
         for row, col, code in A_INITIAL_STATE+B_INITIAL_STATE:
-            self.board[row][col] = code
+            board[row][col] = code
+        self._set_board(board)
 
     def _emit_board_state(self):
         self.boardState.on_next(self._board)
