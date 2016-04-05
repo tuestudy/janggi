@@ -1,2 +1,2 @@
 SET PYTHONPATH=..;core
-python -m janggi.gui.demo
+python -m janggi.gui.main
