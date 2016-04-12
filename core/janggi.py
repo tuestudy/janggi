@@ -1,9 +1,9 @@
-#-*- encoding: utf-8 -*-
-from data import A_INITIAL_STATE, B_INITIAL_STATE, CODE_NAMES, code2name, name2code
+from data import A_INITIAL_STATE, B_INITIAL_STATE
 from helper import create_empty_board, board_state
 
 
 EMPTY = 0
+
 
 class Janggi(object):
     def __init__(self):
