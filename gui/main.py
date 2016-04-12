@@ -123,7 +123,7 @@ class JanggiBoard(Canvas):
             self.piece_to_move = None
             return
         self.tag_raise(self.piece_to_move)
-        for i, j in [(x, y)] + next_coordinates(janggi.board, x, y, p):
+        for i, j in next_coordinates(janggi.board, x, y, p):
             item = self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
