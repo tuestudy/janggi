@@ -110,6 +110,10 @@ class JanggiBoard(Canvas):
         self.put_pieces(board)
 
     def show_candidates(self, e):
+        candidate = self.find_withtag('candidate')
+        if len(candidate) > 0:
+            self.delete('candidate')
+
         self.x, self.y = e.x, e.y
         self.piece_to_move = self.find_closest(e.x, e.y)
         self.candidates = {}
