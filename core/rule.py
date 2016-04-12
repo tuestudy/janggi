@@ -8,20 +8,14 @@ import math
 
 def sorted_coord(coords, origin):
     def distance(dest):
-        return math.sqrt((origin[0] - dest[0])**2 + (origin[1] - dest[1])**2)
+        return math.hypot(origin[0] - dest[0], origin[1] - dest[1])
     return sorted(coords, key=distance)
 
 def is_enemy(board, r, c, code):
-    if(code2name(code)[-1] != code2name(board[r][c])[-1]):
-        return True
-    else:
-        return False
+    return code.team != board[r][c].team
 
 def is_possible(board, r, c, code):
-    if board[r][c] == 0 or is_enemy(board, r, c, code):
-        return True
-    else:
-        return False
+    return board[r][c] == 0 or is_enemy(board, r, c, code)
 
 def next_coordinates(board, current_row, current_col, code):
     ret = []

@@ -19,6 +19,9 @@ class Piece(enum.IntEnum):
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
 
 CODE_NAMES = [p.name.replace('_', '-') if p else p.name for p in Piece]
+for p in Piece:
+    if p:
+        p.team = p.name[-1]
 
 Piece.Kung_a.piece_type = PieceType.Kung
 Piece.Kung_b.piece_type = PieceType.Kung
