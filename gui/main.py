@@ -8,7 +8,7 @@ from PIL import ImageTk, Image
 
 from ..core.data import Piece
 from ..core.janggi import Janggi
-from ..core.rule import next_possible_coordinates
+from ..core.rule import next_coordinates
 
 
 HORIZONTAL_LINES = 10
@@ -118,7 +118,7 @@ class JanggiBoard(Canvas):
             self.piece_to_move = None
             return
         self.tag_raise(self.piece_to_move)
-        for i, j in next_possible_coordinates(x, y, p):
+        for i, j in next_coordinates(janggi.board, x, y, p):
             self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,

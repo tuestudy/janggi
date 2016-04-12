@@ -4,6 +4,26 @@ from data import code2name, name2code, MAX_ROW, MAX_COL, \
 from helper import create_empty_board, board_state
 
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
+def next_coordinates(board, current_row, current_col, code):
+    ret = []
+    coords = next_possible_coordinates(current_row, current_col, code)
+    name = code2name(code)
+    r_esc = c_esc = False
+    for r, c in coords:
+        if name.startswith('Cha'):
+            if r_esc and c_esc : continue
+            elif r == current_row and r_esc == False:
+                if board[r][c] == 0 : ret.append((r,c))
+                else: r_esc = True
+            elif c == current_col and c_esc == False:
+                if board[r][c] == 0 : ret.append((r,c))
+                else: c_esc = True
+        elif name.startswith('Po'):
+            pass
+        elif board[r][c] == 0:
+            ret.append((r,c))
+    return ret
+
 def next_possible_coordinates(current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
     name = code2name(code)
