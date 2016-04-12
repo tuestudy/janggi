@@ -37,7 +37,8 @@ class Janggi(object):
     @broadcasted
     def move(self, old_pos, new_pos):
         assert self.exist(old_pos)
-        assert not self.exist(new_pos)
+        if old_pos == new_pos:
+            return
         row1, col1 = old_pos
         row2, col2 = new_pos
         code = self.board[row1][col1]
