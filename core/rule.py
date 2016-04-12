@@ -1,9 +1,50 @@
 #-*- encoding: utf-8 -*-
 from data import code2name, name2code, MAX_ROW, MAX_COL, \
-        is_valid_code, is_valid_coordinates, MOVES
+        is_valid_code, is_valid_coordinates, MOVES, CODE_NAMES
 from helper import create_empty_board, board_state
+import math
 
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
+
+def sorted_coord(coords, origin):
+    def distance(dest):
+        return math.sqrt((origin[0] - dest[0])**2 + (origin[1] - dest[1])**2)
+    return sorted(coords, key=distance)
+
+def is_enemy(board, r, c, code):
+    if(code2name(code)[-1] != code2name(board[r][c])[-1]):
+        return True
+    else:
+        return False
+
+def is_possible(board, r, c, code):
+    if board[r][c] == 0 and is_enemy(board, r, c, code):
+        return True
+    else:
+        return False
+
+def next_coordinates(board, current_row, current_col, code):
+    ret = []
+    coords = sorted_coord(
+                    next_possible_coordinates(current_row, current_col, code),
+                    (current_row, current_col))
+    name = code2name(code)
+    r_esc = c_esc = False
+    for r, c in coords:
+        if name.startswith('Cha'):
+            if r_esc and c_esc : continue
+            elif r == current_row and r_esc == False:
+                if is_possible(board, r, c, code) : ret.append((r,c))
+                else: r_esc = True
+            elif c == current_col and c_esc == False:
+                if is_possible(board, r, c, code) : ret.append((r,c))
+                else: c_esc = True
+        elif name.startswith('Po'):
+            ret.append((r,c))
+        elif is_possible(board, r, c, code) :
+            ret.append((r,c))
+    return ret
+
 def next_possible_coordinates(current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
     name = code2name(code)
