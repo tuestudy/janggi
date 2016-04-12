@@ -17,16 +17,20 @@ class Janggi(object):
         for row, col, code in A_INITIAL_STATE+B_INITIAL_STATE:
             self.board[row][col] = code
 
+    def exist(self, pos):
+        row, col = pos
+        return self.board[row][col] != EMPTY
+
     def move(self, old_pos, new_pos):
+        assert self.exist(old_pos)
         row1, col1 = old_pos
         row2, col2 = new_pos
-        assert self.board[row1][col1] != EMPTY
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
 
     def delete(self, pos):
+        assert self.exist(pos)
         row, col = pos
-        assert self.board[row][col] != EMPTY
         self.board[row][col] = EMPTY
 
 
