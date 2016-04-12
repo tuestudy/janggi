@@ -130,3 +130,5 @@ MOVES = {
               ]
 }
 MOVES = {pt.name: moves for pt, moves in MOVES.items()}
+
+
