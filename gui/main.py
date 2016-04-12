@@ -63,8 +63,11 @@ class JanggiBoard(Canvas):
         self.draw_vlines()
         self.draw_palaces()
         self.bind('<Button-1>', self.show_candidates)
-        # self.bind('<ButtonRelease-1>', self.remove_candidates)
-        # self.bind('<Button1-Motion>', self.move_piece)
+        self.bind('<ButtonRelease-1>', self.remove_candidates)
+        self.bind('<Button1-Motion>', self.move_piece)
+        self.board_state = Janggi()
+        self.board_state.on_changed = lambda x: self.draw(self.board_state)
+        self.board_state.reset()
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -104,8 +107,8 @@ class JanggiBoard(Canvas):
                 d[item] = PieceInfo(row=i, col=j, piece=piece)
 
     def draw(self, board):
-        b.delete('piece')
-        self.put_pieces(board)
+        self.delete('piece')
+        self.put_pieces(self.board_state.board)
 
     def show_candidates(self, e):
         candidate = self.find_withtag('candidate')
@@ -116,12 +119,12 @@ class JanggiBoard(Canvas):
         self.piece_to_move = self.find_closest(e.x, e.y)
         self.candidates = {}
         try:
-            x, y, p = self.pieces[self.piece_to_move[0]]
+            r, c, p = self.pieces[self.piece_to_move[0]]
         except KeyError:
             self.piece_to_move = None
             return
         self.tag_raise(self.piece_to_move)
-        for i, j in next_coordinates(janggi.board, x, y, p):
+        for i, j in next_coordinates(self.board_state.board, r, c, p):
             item = self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
@@ -138,7 +141,7 @@ class JanggiBoard(Canvas):
             return (e.x-x1) ** 2 + (e.y-y1) ** 2
         c = min(self.find_withtag('candidate'), key=_distance)
         row, col, _ = self.pieces[self.piece_to_move[0]]
-        janggi.move((row, col), self.candidates[c])
+        self.board_state.move((row, col), self.candidates[c])
         self.delete('candidate')
 
     def move_piece(self, e):
@@ -150,8 +153,5 @@ class JanggiBoard(Canvas):
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
-janggi = Janggi()
-janggi.on_changed = lambda board: b.draw(board)
-janggi.reset()
 
 root.mainloop()
