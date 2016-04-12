@@ -2,7 +2,7 @@
 
 from collections import namedtuple
 from pathlib import Path
-from tkinter import *  # noqa
+from tkinter import Tk, Canvas, TRUE, BOTH
 
 from PIL import ImageTk, Image
 
