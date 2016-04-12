@@ -41,7 +41,7 @@ def item_next_possible_coordinates(name, row, col):
     for r, c in MOVES[name.split('-')[0]]:
         if is_valid_coordinates(row + r, col + c):
             candidates.append((row + r, col + c))
-    return candidates 
+    return candidates
 
 def update_possible_coordinates(board, name, row, col, code):
     print("{0} can go to those coordinates from {1}, {2}: ".format(name, row, col))
