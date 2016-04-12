@@ -40,6 +40,8 @@ class Janggi(object):
         assert not self.exist(new_pos)
         row1, col1 = old_pos
         row2, col2 = new_pos
+        code = self.board[row1][col1] 
+        assert(new_pos in next_possible_coordinates(row1, col1, code))
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
 

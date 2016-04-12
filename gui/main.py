@@ -139,7 +139,9 @@ class JanggiBoard(Canvas):
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
-b.draw(janggi.board)
+janggi.on_changed = lambda board: b.draw(janggi.board)
+janggi.reset()
+root.after(1000, lambda: janggi.move((0, 0), (1, 0)))
 root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.mainloop()
