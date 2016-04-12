@@ -62,9 +62,9 @@ class JanggiBoard(Canvas):
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
-        self.bind('<Button-1>', self.show_candidates)
-        self.bind('<ButtonRelease-1>', self.remove_candidates)
-        self.bind('<Button1-Motion>', self.move_piece)
+        self.bind('<Button-1>', self.on_button_pressed)
+        self.bind('<ButtonRelease-1>', self.on_button_released)
+        self.bind('<Button1-Motion>', self.on_button_motion)
         self.board_state = Janggi()
         self.board_state.on_changed = lambda x: self.draw(self.board_state)
         self.board_state.reset()
@@ -110,11 +110,21 @@ class JanggiBoard(Canvas):
         self.delete('piece')
         self.put_pieces(self.board_state.board)
 
-    def show_candidates(self, e):
-        candidate = self.find_withtag('candidate')
-        if len(candidate) > 0:
-            self.delete('candidate')
+    def on_button_pressed(self, e):
+        self.show_candidates(e)
 
+    def on_button_released(self, e):
+        if self.piece_to_move:
+            self.remove_candidates(e)
+        self.piece_to_move = None
+
+    def on_button_motion(self, e):
+        if not self.piece_to_move:
+            return
+        self.move(self.piece_to_move, e.x - self.x, e.y - self.y)
+        self.x, self.y = e.x, e.y
+
+    def show_candidates(self, e):
         self.x, self.y = e.x, e.y
         self.piece_to_move = self.find_closest(e.x, e.y)
         self.candidates = {}
@@ -143,12 +153,6 @@ class JanggiBoard(Canvas):
         row, col, _ = self.pieces[self.piece_to_move[0]]
         self.board_state.move((row, col), self.candidates[c])
         self.delete('candidate')
-
-    def move_piece(self, e):
-        if not self.piece_to_move:
-            return
-        self.move(self.piece_to_move, e.x - self.x, e.y - self.y)
-        self.x, self.y = e.x, e.y
 
 
 b = JanggiBoard()
