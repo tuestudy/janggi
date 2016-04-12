@@ -1,7 +1,7 @@
 #-*- encoding: utf-8 -*-
 from data import A_INITIAL_STATE, B_INITIAL_STATE, is_valid_coordinates
 from helper import create_empty_board, board_state
-from rule import next_possible_coordinates
+from rule import next_coordinates
 
 EMPTY = 0
 
@@ -41,7 +41,7 @@ class Janggi(object):
         row1, col1 = old_pos
         row2, col2 = new_pos
         code = self.board[row1][col1]
-        assert(new_pos in next_possible_coordinates(row1, col1, code))
+        assert(new_pos in next_coordinates(self.board, row1, col1, code))
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
 
