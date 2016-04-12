@@ -17,11 +17,9 @@ MARGIN_TOP = MARGIN_LEFT = 50
 CELL_SIZE = 50
 BOARD_WIDTH = CELL_SIZE * (VERTICAL_LINES - 1)
 BOARD_HEIGHT = CELL_SIZE * (HORIZONTAL_LINES - 1)
+BOARD_COLOR = '#F7931E'
 CANVAS_WIDTH = BOARD_WIDTH + 2 * MARGIN_LEFT
 CANVAS_HEIGHT = BOARD_HEIGHT + 2 * MARGIN_TOP
-
-janggi = Janggi()
-janggi.reset()
 
 resource_dir = Path(__file__).resolve().parent / 'resource'
 images = {
@@ -41,9 +39,9 @@ images = {
     Piece.Sa_b: 'Green_Sa',
 }
 
-
 root = Tk()
-
+root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
+root.title(u'조선장기')
 
 PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
 
@@ -59,14 +57,14 @@ class JanggiBoard(Canvas):
     def __init__(self, *args, **kwargs):
         Canvas.__init__(
             self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
-            background='#F7931E', *args, **kwargs
+            background=BOARD_COLOR, *args, **kwargs
         )
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
         self.bind('<Button-1>', self.show_candidates)
-        self.bind('<ButtonRelease-1>', self.remove_candidates)
-        self.bind('<Button1-Motion>', self.move_piece)
+        # self.bind('<ButtonRelease-1>', self.remove_candidates)
+        # self.bind('<Button1-Motion>', self.move_piece)
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -152,8 +150,8 @@ class JanggiBoard(Canvas):
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
-janggi.on_changed = lambda board: b.draw(janggi.board)
+janggi = Janggi()
+janggi.on_changed = lambda board: b.draw(board)
 janggi.reset()
-root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
-root.title(u'조선장기')
+
 root.mainloop()
