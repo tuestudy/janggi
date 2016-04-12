@@ -49,7 +49,6 @@ def update_possible_coordinates(board, name, row, col, code):
         board[r][c] = 100
 
 if __name__ == '__main__':
-    from helper import create_empty_board
     cha_code = name2code('Cha-a')
     board = create_empty_board()
     board[1][1] = cha_code
