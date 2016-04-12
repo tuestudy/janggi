@@ -1,6 +1,6 @@
 #-*- encoding: utf-8 -*-
 from data import code2name, name2code, MAX_ROW, MAX_COL, \
-        is_valid_code, is_valid_coordinates, MOVES, CODE_NAMES
+        is_valid_code, is_valid_coordinates, MOVES
 from helper import create_empty_board, board_state
 import math
 
@@ -18,7 +18,7 @@ def is_enemy(board, r, c, code):
         return False
 
 def is_possible(board, r, c, code):
-    if board[r][c] == 0 and is_enemy(board, r, c, code):
+    if board[r][c] == 0 or is_enemy(board, r, c, code):
         return True
     else:
         return False
