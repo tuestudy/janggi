@@ -47,7 +47,6 @@ root.bind('<Escape>', lambda e: root.quit())
 
 PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
 
-
 class JanggiBoard:
     photoimages = {
         piece: ImageTk.PhotoImage(Image.open(
@@ -67,8 +66,7 @@ class JanggiBoard:
         self.canvas.bind('<Button-1>', self.on_button_pressed)
         self.canvas.bind('<ButtonRelease-1>', self.on_button_released)
         self.canvas.bind('<Button1-Motion>', self.on_button_motion)
-        self.board_state = Janggi()
-        self.board_state.on_changed = lambda x: self.update_canvas(self.board_state)
+        self.board_state = Janggi(lambda x: self.update_canvas(self.board_state))
         self.board_state.reset()
 
     def draw_hlines(self):

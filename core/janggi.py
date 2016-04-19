@@ -13,9 +13,9 @@ def broadcasted(func, ):
     return _func
 
 class Janggi(object):
-    def __init__(self):
+    def __init__(self, change_callback=None):
         self.board = [[EMPTY]*9 for _ in range(10)]
-        self.on_changed = None
+        self.on_changed = change_callback
 
     def __repr__(self):
         return board_state(self.board)
@@ -53,13 +53,11 @@ class Janggi(object):
         self.board[row][col] = EMPTY
 
 if '__main__' == __name__:
-    janggi = Janggi()
-    janggi.reset()
-    print(janggi)
-
     def change_callback(board):
         print(janggi)
 
-    janggi.on_changed = change_callback
+    janggi = Janggi(change_callback)
+    janggi.reset()
+
     janggi.move((0, 0), (1, 0))
     janggi.delete((1, 0))
