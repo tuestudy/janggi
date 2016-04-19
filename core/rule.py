@@ -20,7 +20,7 @@ def is_possible(board, r, c, code):
 def next_coordinates(board, current_row, current_col, code):
     ret = []
     coords = sorted_coord(
-                    next_possible_coordinates(current_row, current_col, code),
+                    next_possible_coordinates(board, current_row, current_col, code),
                     (current_row, current_col))
     name = code2name(code)
     r_esc = c_esc = False
@@ -39,13 +39,13 @@ def next_coordinates(board, current_row, current_col, code):
             ret.append((r,c))
     return ret
 
-def next_possible_coordinates(current_row, current_col, code):
+def next_possible_coordinates(board, current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
     name = code2name(code)
     if name.startswith('Cha'):
         return cha_next_possible_coordinates(current_row, current_col)
     elif name.startswith('Po'):
-        return po_next_possible_coordinates(current_row, current_col)
+        return po_next_possible_coordinates(board, current_row, current_col)
     else:
         return item_next_possible_coordinates(name, current_row, current_col)
 
@@ -61,14 +61,61 @@ def cha_next_possible_coordinates(row, col):
             candidates.append( (row, c) )
     return candidates
 
-def po_next_possible_coordinates(row, col):
+def po_next_possible_coordinates(board, row, col):
     candidates = []
-    for r in range(0, MAX_ROW+1):
-        if abs(row-r) > 1:
-            candidates.append( (r, col) )
-    for c in range(0, MAX_COL+1):
-        if abs(col-c) > 1:
-            candidates.append( (row, c) )
+
+    def _isPo(code):
+        return code2name(code).startswith('Po')
+
+    blocked = False
+    for r in range(row+1, MAX_ROW+1):
+        if _isPo(board[r][col]):
+            break
+        if not blocked and board[r][col] != 0:
+            blocked = True
+            continue
+        if blocked:
+            if board[r][col] != 0:
+                break
+            else:
+                candidates.append((r, col))
+
+    blocked = False
+    for r in range(row-1, 0-1, -1):
+        if _isPo(board[r][col]):
+            break
+        if not blocked and board[r][col] != 0:
+            blocked = True
+            continue
+        if blocked:
+            candidates.append((r, col))
+            if board[r][col] != 0:
+                break
+
+    blocked = False
+    for c in range(col+1, MAX_COL+1):
+        if _isPo(board[row][c]):
+            break
+        if not blocked and board[row][c] != 0:
+            blocked = True
+            continue
+        if blocked:
+            candidates.append((row, c))
+            if board[row][c] != 0:
+                break
+
+    blocked = False
+    for c in range(col-1, 0-1, -1):
+        if _isPo(board[row][c]):
+            break
+        if not blocked and board[row][c] != 0:
+            blocked = True
+            continue
+        if blocked:
+            candidates.append((row, c))
+            if board[row][c] != 0:
+                break
+
     return candidates
 
 def item_next_possible_coordinates(name, row, col):
@@ -80,7 +127,7 @@ def item_next_possible_coordinates(name, row, col):
 
 def update_possible_coordinates(board, name, row, col, code):
     print("{0} can go to those coordinates from {1}, {2}: ".format(name, row, col))
-    for r, c in next_possible_coordinates(row, col, code):
+    for r, c in next_possible_coordinates(board, row, col, code):
         board[r][c] = 100
 
 if __name__ == '__main__':
@@ -88,7 +135,7 @@ if __name__ == '__main__':
     board = create_empty_board()
     board[1][1] = cha_code
     print("Cha can go to those coordinates from 1, 1: ")
-    for r, c in next_possible_coordinates(1, 1, cha_code):
+    for r, c in next_possible_coordinates(board, 1, 1, cha_code):
         board[r][c] = 100
     print(board_state(board))
 
@@ -96,7 +143,7 @@ if __name__ == '__main__':
     board = create_empty_board()
     board[2][2] = po_code
     print("Po can go to those coordinates from 2, 2: ")
-    for r, c in next_possible_coordinates(2, 2, po_code):
+    for r, c in next_possible_coordinates(board, 2, 2, po_code):
         board[r][c] = 100
     print(board_state(board))
 
