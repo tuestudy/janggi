@@ -6,8 +6,8 @@ MAX_COL = 8
 
 """
   졸/병이 움직이는 방향을 정할 때 진영 정보가 필요함
-  * A 가 상단(Row 가 작은 쪽)
-  * B 가 하단(Row 가 큰 쪽)
+  * A 가 상단(Row 가 작은 쪽) 漢
+  * B 가 하단(Row 가 큰 쪽) 楚
 """
 
 class PieceType(enum.IntEnum):

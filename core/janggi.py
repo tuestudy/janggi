@@ -16,6 +16,7 @@ class Janggi(object):
     def __init__(self, change_callback=None):
         self.board = [[EMPTY]*9 for _ in range(10)]
         self.on_changed = change_callback
+        self.turn = 'b'  # b(楚) -> a(漢) -> b -> a -> ..
 
     def __repr__(self):
         return board_state(self.board)
@@ -27,6 +28,12 @@ class Janggi(object):
     def exist(self, pos):
         row, col = pos
         return self.board[row][col] != EMPTY
+
+    def change_turn(self):
+        self.turn = {'a': 'b', 'b': 'a'}[self.turn]
+
+    def can_move(self, piece):
+        return piece.team == self.turn
 
     @broadcasted
     def reset(self):
