@@ -132,6 +132,8 @@ class JanggiBoard:
         self.candidates = {}
         try:
             r, c, p = self.pieces[self.piece_to_move[0]]
+            if not self.board_state.can_move(p):
+                raise KeyError
         except KeyError:
             self.piece_to_move = None
             return
@@ -156,6 +158,7 @@ class JanggiBoard:
         if _distance(c) > CELL_SIZE:
             self.board_state.move((row, col), (row, col))
         else:
+            self.board_state.change_turn()
             self.board_state.move((row, col), self.candidates[c])
 
 b = JanggiBoard()
