@@ -42,6 +42,7 @@ images = {
 root = Tk()
 root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
+root.bind('<Escape>', lambda e: root.quit())
 
 PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
 
