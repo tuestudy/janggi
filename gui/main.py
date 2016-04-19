@@ -158,7 +158,7 @@ class JanggiBoard:
         if _distance(c) > CELL_SIZE:
             self.board_state.move((row, col), (row, col))
         else:
-            self.board_state.change_turn()
+            self.board_state.change_turn()  # TODO  inside move()?
             self.board_state.move((row, col), self.candidates[c])
 
 b = JanggiBoard()
