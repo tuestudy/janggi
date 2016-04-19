@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import math
 from collections import namedtuple
 from pathlib import Path
 from tkinter import Tk, Canvas, TRUE, BOTH
@@ -116,8 +117,10 @@ class JanggiBoard(Canvas):
 
     def on_button_released(self, e):
         if self.piece_to_move:
-            self.remove_candidates(e)
+            self.move_piece(e)
         self.piece_to_move = None
+        self.candidates = {}
+        self.delete('candidate')
 
     def on_button_motion(self, e):
         if not self.piece_to_move:
@@ -135,7 +138,7 @@ class JanggiBoard(Canvas):
             self.piece_to_move = None
             return
         self.tag_raise(self.piece_to_move)
-        for i, j in next_coordinates(self.board_state.board, r, c, p):
+        for i, j in [(r, c)] + next_coordinates(self.board_state.board, r, c, p):
             item = self.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
@@ -145,16 +148,17 @@ class JanggiBoard(Canvas):
                 tags='candidate')
             self.candidates[item] = i, j
 
-    def remove_candidates(self, e):
+    def move_piece(self, e):
         def _distance(c):
             left, top, right, bottom = self.coords(c)
             x1, y1 = (left + right) // 2, (top + bottom) // 2
-            return (e.x-x1) ** 2 + (e.y-y1) ** 2
+            return math.sqrt((e.x-x1) ** 2 + (e.y-y1) ** 2)
         c = min(self.find_withtag('candidate'), key=_distance)
         row, col, _ = self.pieces[self.piece_to_move[0]]
-        self.board_state.move((row, col), self.candidates[c])
-        self.delete('candidate')
-
+        if _distance(c) > CELL_SIZE:
+            self.board_state.move((row, col), (row, col))
+        else:
+            self.board_state.move((row, col), self.candidates[c])
 
 b = JanggiBoard()
 b.pack(expand=TRUE, fill=BOTH)
