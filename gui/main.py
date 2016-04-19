@@ -48,7 +48,7 @@ root.bind('<Escape>', lambda e: root.quit())
 PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
 
 
-class JanggiBoard(Canvas):
+class JanggiBoard:
     photoimages = {
         piece: ImageTk.PhotoImage(Image.open(
             resource_dir / (filename + '.png')
@@ -57,39 +57,39 @@ class JanggiBoard(Canvas):
     }
 
     def __init__(self, *args, **kwargs):
-        Canvas.__init__(
-            self, width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
+        self.canvas = Canvas(
+            width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
             background=BOARD_COLOR, *args, **kwargs
         )
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
-        self.bind('<Button-1>', self.on_button_pressed)
-        self.bind('<ButtonRelease-1>', self.on_button_released)
-        self.bind('<Button1-Motion>', self.on_button_motion)
+        self.canvas.bind('<Button-1>', self.on_button_pressed)
+        self.canvas.bind('<ButtonRelease-1>', self.on_button_released)
+        self.canvas.bind('<Button1-Motion>', self.on_button_motion)
         self.board_state = Janggi()
-        self.board_state.on_changed = lambda x: self.draw(self.board_state)
+        self.board_state.on_changed = lambda x: self.update_canvas(self.board_state)
         self.board_state.reset()
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
             y = MARGIN_TOP + i * CELL_SIZE
-            self.create_line(MARGIN_LEFT, y, MARGIN_LEFT + BOARD_WIDTH, y)
+            self.canvas.create_line(MARGIN_LEFT, y, MARGIN_LEFT + BOARD_WIDTH, y)
 
     def draw_vlines(self):
         for i in range(VERTICAL_LINES):
             x = MARGIN_LEFT + i * CELL_SIZE
-            self.create_line(x, MARGIN_TOP, x, MARGIN_TOP + BOARD_HEIGHT)
+            self.canvas.create_line(x, MARGIN_TOP, x, MARGIN_TOP + BOARD_HEIGHT)
 
     def draw_palaces(self):
         for i in (0, 7):
             y = MARGIN_TOP + i * CELL_SIZE
-            self.create_line(
+            self.canvas.create_line(
                 MARGIN_LEFT + 3 * CELL_SIZE,
                 y,
                 MARGIN_TOP + 5 * CELL_SIZE,
                 y + 2 * CELL_SIZE)
-            self.create_line(
+            self.canvas.create_line(
                 MARGIN_LEFT + 5 * CELL_SIZE,
                 y,
                 MARGIN_TOP + 3 * CELL_SIZE,
@@ -101,15 +101,15 @@ class JanggiBoard(Canvas):
             for j, piece in enumerate(row):
                 if not piece:
                     continue
-                item = self.create_image(
+                item = self.canvas.create_image(
                     MARGIN_LEFT + j * CELL_SIZE,
                     MARGIN_TOP + i * CELL_SIZE,
                     image=self.photoimages[piece],
                     tags='piece')
                 d[item] = PieceInfo(row=i, col=j, piece=piece)
 
-    def draw(self, board):
-        self.delete('piece')
+    def update_canvas(self, board):
+        self.canvas.delete('piece')
         self.put_pieces(self.board_state.board)
 
     def on_button_pressed(self, e):
@@ -120,26 +120,26 @@ class JanggiBoard(Canvas):
             self.move_piece(e)
         self.piece_to_move = None
         self.candidates = {}
-        self.delete('candidate')
+        self.canvas.delete('candidate')
 
     def on_button_motion(self, e):
         if not self.piece_to_move:
             return
-        self.move(self.piece_to_move, e.x - self.x, e.y - self.y)
+        self.canvas.move(self.piece_to_move, e.x - self.x, e.y - self.y)
         self.x, self.y = e.x, e.y
 
     def show_candidates(self, e):
         self.x, self.y = e.x, e.y
-        self.piece_to_move = self.find_closest(e.x, e.y)
+        self.piece_to_move = self.canvas.find_closest(e.x, e.y)
         self.candidates = {}
         try:
             r, c, p = self.pieces[self.piece_to_move[0]]
         except KeyError:
             self.piece_to_move = None
             return
-        self.tag_raise(self.piece_to_move)
+        self.canvas.tag_raise(self.piece_to_move)
         for i, j in [(r, c)] + next_coordinates(self.board_state.board, r, c, p):
-            item = self.create_oval(
+            item = self.canvas.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_LEFT + j * CELL_SIZE + (CELL_SIZE // 4),
@@ -150,10 +150,10 @@ class JanggiBoard(Canvas):
 
     def move_piece(self, e):
         def _distance(c):
-            left, top, right, bottom = self.coords(c)
+            left, top, right, bottom = self.canvas.coords(c)
             x1, y1 = (left + right) // 2, (top + bottom) // 2
             return math.sqrt((e.x-x1) ** 2 + (e.y-y1) ** 2)
-        c = min(self.find_withtag('candidate'), key=_distance)
+        c = min(self.canvas.find_withtag('candidate'), key=_distance)
         row, col, _ = self.pieces[self.piece_to_move[0]]
         if _distance(c) > CELL_SIZE:
             self.board_state.move((row, col), (row, col))
@@ -161,6 +161,6 @@ class JanggiBoard(Canvas):
             self.board_state.move((row, col), self.candidates[c])
 
 b = JanggiBoard()
-b.pack(expand=TRUE, fill=BOTH)
+b.canvas.pack(expand=TRUE, fill=BOTH)
 
 root.mainloop()
