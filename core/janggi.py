@@ -52,6 +52,7 @@ class Janggi(object):
         assert(new_pos in next_coordinates(self.board, row1, col1, code))
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
+        self.change_turn()
 
     @broadcasted
     def delete(self, pos):

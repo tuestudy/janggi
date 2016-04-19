@@ -45,7 +45,7 @@ root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.bind('<Escape>', lambda e: root.quit())
 
-PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'piece'))
+PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'name', 'item'))
 
 class JanggiBoard:
     photoimages = {
@@ -104,40 +104,45 @@ class JanggiBoard:
                     MARGIN_TOP + i * CELL_SIZE,
                     image=self.photoimages[piece],
                     tags='piece')
-                d[item] = PieceInfo(row=i, col=j, piece=piece)
+                d[item] = PieceInfo(row=i, col=j, name=piece, item=item)
 
     def update_canvas(self, board):
+        self.current_piece = None
         self.canvas.delete('piece')
-        self.put_pieces(self.board_state.board)
-
-    def on_button_pressed(self, e):
-        self.show_candidates(e)
-
-    def on_button_released(self, e):
-        if self.piece_to_move:
-            self.move_piece(e)
-        self.piece_to_move = None
         self.candidates = {}
         self.canvas.delete('candidate')
+        self.put_pieces(self.board_state.board)
+
+    def get_current_piece(self):
+        item = self.canvas.find_withtag('current')
+        if len(item) == 0:
+            return None
+        if not 'piece' in self.canvas.gettags(item[0]):
+            return None
+        current_piece = self.pieces[item[0]]
+        if not self.board_state.can_move(current_piece.name):
+            return None
+        return current_piece
+
+    def on_button_pressed(self, e):
+        self.current_piece = self.get_current_piece()
+        if self.current_piece:
+            self.x, self.y = e.x, e.y
+            self.show_candidates(e)
+
+    def on_button_released(self, e):
+        if self.current_piece:
+            self.move_piece(e)
 
     def on_button_motion(self, e):
-        if not self.piece_to_move:
-            return
-        self.canvas.move(self.piece_to_move, e.x - self.x, e.y - self.y)
-        self.x, self.y = e.x, e.y
+        if self.current_piece:
+            self.canvas.move(self.current_piece.item, e.x - self.x, e.y - self.y)
+            self.x, self.y = e.x, e.y
 
     def show_candidates(self, e):
-        self.x, self.y = e.x, e.y
-        self.piece_to_move = self.canvas.find_closest(e.x, e.y)
+        r, c, p, pi = self.current_piece
+        self.canvas.tag_raise(pi)
         self.candidates = {}
-        try:
-            r, c, p = self.pieces[self.piece_to_move[0]]
-            if not self.board_state.can_move(p):
-                raise KeyError
-        except KeyError:
-            self.piece_to_move = None
-            return
-        self.canvas.tag_raise(self.piece_to_move)
         for i, j in [(r, c)] + next_coordinates(self.board_state.board, r, c, p):
             item = self.canvas.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
@@ -152,14 +157,15 @@ class JanggiBoard:
         def _distance(c):
             left, top, right, bottom = self.canvas.coords(c)
             x1, y1 = (left + right) // 2, (top + bottom) // 2
-            return math.sqrt((e.x-x1) ** 2 + (e.y-y1) ** 2)
-        c = min(self.canvas.find_withtag('candidate'), key=_distance)
-        row, col, _ = self.pieces[self.piece_to_move[0]]
-        if _distance(c) > CELL_SIZE:
-            self.board_state.move((row, col), (row, col))
+            return math.hypot((e.x - x1), (e.y - y1))
+        old_pos = (self.current_piece.row, self.current_piece.col)
+        candidates = self.canvas.find_withtag('candidate')
+        if len(candidates) != 0:
+            c = min(candidates, key=_distance)
+            new_pos = self.candidates[c] if (_distance(c) < CELL_SIZE) else old_pos
         else:
-            self.board_state.change_turn()  # TODO  inside move()?
-            self.board_state.move((row, col), self.candidates[c])
+            new_pos = old_pos
+        self.board_state.move(old_pos, new_pos)
 
 b = JanggiBoard()
 b.canvas.pack(expand=TRUE, fill=BOTH)
