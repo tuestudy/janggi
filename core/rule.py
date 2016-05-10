@@ -33,6 +33,11 @@ def next_coordinates(board, current_row, current_col, code):
             elif c == current_col and c_esc == False:
                 if is_possible(board, r, c, code) : ret.append((r,c))
                 else: c_esc = True
+        elif name.startswith('Sa') or name.startswith('Kung'):
+            if 2 < r < 7: continue
+            if not (3<= c <= 5): continue
+            if is_possible(board, r, c, code):
+                ret.append((r,c))
         elif name.startswith('Po'):
             ret.append((r,c))
         elif is_possible(board, r, c, code) :
