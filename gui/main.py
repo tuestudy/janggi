@@ -41,7 +41,7 @@ images = {
 }
 
 root = Tk()
-root.title(u'조선장기')
+root.title(u'조선장기 楚')
 root.bind('<Escape>', lambda e: root.quit())
 
 PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'name', 'item'))
@@ -69,7 +69,9 @@ class JanggiBoard:
         self.canvas.bind('<Button-1>', self.on_button_pressed)
         self.canvas.bind('<ButtonRelease-1>', self.on_button_released)
         self.canvas.bind('<Button1-Motion>', self.on_button_motion)
-        self.board_state = Janggi(lambda x: self.update_canvas(self.board_state))
+        self.board_state = Janggi(
+            lambda x: self.update_canvas(self.board_state),
+            turn_change_callback=self.on_turn_changed)
         self.board_state.reset()
 
     def pack(self, *args, **kwargs):
@@ -148,6 +150,9 @@ class JanggiBoard:
 
     def on_change_turn_button_pressed(self):
         self.board_state.change_turn()
+
+    def on_turn_changed(self, turn):
+        root.title('조선장기 {}'.format({'a': '漢', 'b': '楚'}[turn]))
 
     def show_candidates(self, e):
         r, c, p, pi = self.current_piece
