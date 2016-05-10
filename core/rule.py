@@ -40,6 +40,22 @@ def next_coordinates(board, current_row, current_col, code):
                 ret.append((r,c))
         elif name.startswith('Po'):
             ret.append((r,c))
+        elif name.startswith('Ma'):
+            ri = 1 if r < current_row else -1
+            ci = 1 if c < current_col else -1
+            ok = True
+            for i in range(0, 2):
+                if not is_possible(board, r+ri*i, c+ci*i, code):
+                    ok = False
+            if ok: ret.append((r,c))
+        elif name.startswith('Sang'):
+            ri = 1 if r < current_row else -1
+            ci = 1 if c < current_col else -1
+            ok = True
+            for i in range(0, 3):
+                if not is_possible(board, r+ri*i, c+ci*i, code):
+                    ok = False
+            if ok: ret.append((r,c))
         elif is_possible(board, r, c, code) :
             ret.append((r,c))
     return ret
