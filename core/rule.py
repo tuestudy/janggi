@@ -75,10 +75,9 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
+            candidates.append((r, col))
             if board[r][col] != 0:
                 break
-            else:
-                candidates.append((r, col))
 
     blocked = False
     for r in range(row-1, 0-1, -1):
