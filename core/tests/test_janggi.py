@@ -29,3 +29,10 @@ def test_turn():
     assert j.turn == 'a'  # 漢
     assert j.can_move(Piece.Cha_a)
     assert not j.can_move(Piece.Cha_b)
+
+
+def test_score():
+    j = janggi.Janggi()
+    j.reset()
+    assert j.score('a') == 72 + 1.5
+    assert j.score('b') == 72

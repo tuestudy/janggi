@@ -1,9 +1,10 @@
-#-*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 from data import A_INITIAL_STATE, B_INITIAL_STATE, is_valid_coordinates
 from helper import create_empty_board, board_state
 from rule import next_coordinates
 
 EMPTY = 0
+
 
 def broadcasted(func, ):
     def _func(*args, **kwargs):
@@ -12,11 +13,13 @@ def broadcasted(func, ):
         self.broadcast()
     return _func
 
+
 class Janggi(object):
     def __init__(self, change_callback=None):
         self.board = [[EMPTY]*9 for _ in range(10)]
         self.on_changed = change_callback
         self.turn = 'b'  # b(楚) -> a(漢) -> b -> a -> ..
+        self.first_mover = self.turn
 
     def __repr__(self):
         return board_state(self.board)
@@ -59,6 +62,16 @@ class Janggi(object):
         assert self.exist(pos)
         row, col = pos
         self.board[row][col] = EMPTY
+
+    def score(self, player):
+        s = sum(piece.score
+                for row in self.board
+                for piece in row
+                if piece and piece.team == player)
+        if player != self.first_mover:
+            # 후수자 덤
+            s += 1.5
+        return s
 
 if '__main__' == __name__:
     def change_callback(board):

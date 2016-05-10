@@ -17,11 +17,22 @@ class Piece(enum.IntEnum):
     __ = 0
     Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Byung_a = range(1, 8)
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
+    @property
+    def score(self):
+        return self.piece_type.score
 
 CODE_NAMES = [p.name.replace('_', '-') if p else p.name for p in Piece]
 for p in Piece:
     if p:
         p.team = p.name[-1]
+
+PieceType.Kung.score = 0
+PieceType.Cha.score = 13
+PieceType.Po.score = 7
+PieceType.Ma.score = 5
+PieceType.Sang.score = 3
+PieceType.Sa.score = 3
+PieceType.Byung.score = PieceType.Jol.score = 2
 
 Piece.Kung_a.piece_type = PieceType.Kung
 Piece.Kung_b.piece_type = PieceType.Kung
