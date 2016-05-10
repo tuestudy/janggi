@@ -3,7 +3,7 @@
 import math
 from collections import namedtuple
 from pathlib import Path
-from tkinter import Tk, Canvas, TRUE, BOTH
+from tkinter import Tk, Button, Canvas, TRUE, BOTH
 
 from PIL import ImageTk, Image
 
@@ -41,7 +41,6 @@ images = {
 }
 
 root = Tk()
-root.geometry('{}x{}'.format(CANVAS_WIDTH, CANVAS_HEIGHT))
 root.title(u'조선장기')
 root.bind('<Escape>', lambda e: root.quit())
 
@@ -60,6 +59,10 @@ class JanggiBoard:
             width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
             background=BOARD_COLOR, *args, **kwargs
         )
+        self.change_turn_button = Button(
+            text='한수쉼',
+            command=self.on_change_turn_button_pressed,
+        )
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
@@ -68,6 +71,10 @@ class JanggiBoard:
         self.canvas.bind('<Button1-Motion>', self.on_button_motion)
         self.board_state = Janggi(lambda x: self.update_canvas(self.board_state))
         self.board_state.reset()
+
+    def pack(self, *args, **kwargs):
+        self.change_turn_button.pack(expand=TRUE, fill=BOTH)
+        self.canvas.pack(expand=TRUE, fill=BOTH)
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -139,6 +146,9 @@ class JanggiBoard:
             self.canvas.move(self.current_piece.item, e.x - self.x, e.y - self.y)
             self.x, self.y = e.x, e.y
 
+    def on_change_turn_button_pressed(self):
+        self.board_state.change_turn()
+
     def show_candidates(self, e):
         r, c, p, pi = self.current_piece
         self.canvas.tag_raise(pi)
@@ -168,6 +178,6 @@ class JanggiBoard:
         self.board_state.move(old_pos, new_pos)
 
 b = JanggiBoard()
-b.canvas.pack(expand=TRUE, fill=BOTH)
+b.pack()
 
 root.mainloop()
