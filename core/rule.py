@@ -1,4 +1,3 @@
-#-*- encoding: utf-8 -*-
 from data import (
     code2name, name2code, MAX_ROW, MAX_COL,
     is_valid_coordinates, MOVES,
@@ -9,13 +8,16 @@ import math
 
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
 
+
 def sorted_coord(coords, origin):
     def distance(dest):
         return math.hypot(origin[0] - dest[0], origin[1] - dest[1])
     return sorted(coords, key=distance)
 
+
 def is_enemy(board, r, c, code):
     return code.team != board[r][c].team
+
 
 def is_possible(board, r, c, code):
     return board[r][c] == 0 or is_enemy(board, r, c, code)
@@ -38,7 +40,8 @@ def next_candidates_for(*piece_types):
 def cha(board, current_row, current_col, code, coords):
     r_esc = c_esc = False
     for r, c in coords:
-        if r_esc and c_esc: continue
+        if r_esc and c_esc:
+            continue
         elif r == current_row and r_esc is False:
             if is_possible(board, r, c, code):
                 yield r, c
@@ -63,7 +66,7 @@ def ma(board, current_row, current_col, code, coords):
             elif not is_possible(board, r+ri*i, c+ci*i, code):
                 ok = False
         if ok:
-            yield r,c
+            yield r, c
 
 
 @next_candidates_for(PieceType.Sang)
@@ -84,8 +87,10 @@ def sang(board, current_row, current_col, code, coords):
 @next_candidates_for(PieceType.Sa, PieceType.Kung)
 def kung(board, current_row, current_col, code, coords):
     for r, c in coords:
-        if 2 < r < 7: continue
-        if not (3<= c <= 5): continue
+        if 2 < r < 7:
+            continue
+        if not (3 <= c <= 5):
+            continue
         if is_possible(board, r, c, code):
             yield r, c
 
@@ -101,13 +106,14 @@ def byung(board, current_row, current_col, code, coords):
         if is_possible(board, r, c, code):
             yield r, c
 
+
 def next_coordinates(board, current_row, current_col, code):
     coords = sorted_coord(
-                    next_possible_coordinates(board, current_row, current_col, code),
-                    (current_row, current_col))
-    name = code2name(code)
+        next_possible_coordinates(board, current_row, current_col, code),
+        (current_row, current_col))
     f = coordinates_funcs[code.piece_type]
     return list(f(board, current_row, current_col, code, coords))
+
 
 def next_possible_coordinates(board, current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
@@ -121,15 +127,17 @@ def next_possible_coordinates(board, current_row, current_col, code):
 
     return []
 
+
 def cha_next_possible_coordinates(row, col):
     candidates = []
     for r in range(0, MAX_ROW+1):
         if r != row:
-            candidates.append( (r, col) )
+            candidates.append((r, col))
     for c in range(0, MAX_COL+1):
         if c != col:
-            candidates.append( (row, c) )
+            candidates.append((row, c))
     return candidates
+
 
 def po_next_possible_coordinates(board, row, col):
     candidates = []
@@ -187,6 +195,7 @@ def po_next_possible_coordinates(board, row, col):
 
     return candidates
 
+
 def item_next_possible_coordinates(name, row, col):
     candidates = []
     for r, c in MOVES[name.split('-')[0]]:
@@ -194,8 +203,11 @@ def item_next_possible_coordinates(name, row, col):
             candidates.append((row + r, col + c))
     return candidates
 
+
 def update_possible_coordinates(board, name, row, col, code):
-    print("{0} can go to those coordinates from {1}, {2}: ".format(name, row, col))
+    print("{0} can go to those coordinates from {1}, {2}: ".format(
+        name, row, col
+    ))
     for r, c in next_possible_coordinates(board, row, col, code):
         board[r][c] = 100
 
