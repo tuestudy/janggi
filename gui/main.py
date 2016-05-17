@@ -3,7 +3,7 @@
 import math
 from collections import namedtuple
 from pathlib import Path
-from tkinter import Tk, Button, Canvas, TRUE, BOTH
+from tkinter import Tk, Button, Label, Canvas, TRUE, BOTH, Y, Grid
 
 from PIL import ImageTk, Image
 
@@ -63,6 +63,11 @@ class JanggiBoard:
             text='한수쉼',
             command=self.on_change_turn_button_pressed,
         )
+
+        self.label_colors = { 'a': 'red', 'b':'blue', 'default': root.cget('bg') }
+        self.turn_0_label = Label(text="       ")
+        self.turn_1_label = Label(text="       ", bg=self.label_colors['b'])
+
         self.draw_hlines()
         self.draw_vlines()
         self.draw_palaces()
@@ -74,9 +79,11 @@ class JanggiBoard:
             turn_change_callback=self.on_turn_changed)
         self.board_state.reset()
 
-    def pack(self, *args, **kwargs):
-        self.change_turn_button.pack(expand=TRUE, fill=BOTH)
-        self.canvas.pack(expand=TRUE, fill=BOTH)
+    def initGui(self):
+        self.canvas.grid(row=0, column=0, rowspan=3)
+        self.turn_0_label.grid(row=0, column=1)
+        self.change_turn_button.grid(row=1, column=1)
+        self.turn_1_label.grid(row=2, column=1)
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
@@ -152,6 +159,12 @@ class JanggiBoard:
         self.board_state.change_turn()
 
     def on_turn_changed(self, turn):
+        if turn == 'a':
+            self.turn_0_label.configure(bg=self.label_colors[turn])
+            self.turn_1_label.configure(bg=self.label_colors['default'])
+        else:
+            self.turn_0_label.configure(bg=self.label_colors['default'])
+            self.turn_1_label.configure(bg=self.label_colors[turn])
         root.title('조선장기 {}'.format({'a': '漢', 'b': '楚'}[turn]))
 
     def show_candidates(self, e):
@@ -183,6 +196,6 @@ class JanggiBoard:
         self.board_state.move(old_pos, new_pos)
 
 b = JanggiBoard()
-b.pack()
+b.initGui()
 
 root.mainloop()
