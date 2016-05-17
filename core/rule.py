@@ -38,7 +38,9 @@ def next_coordinates(board, current_row, current_col, code):
             ci = 1 if c < current_col else -1
             ok = True
             for i in range(0, 2):
-                if not is_possible(board, r+ri*i, c+ci*i, code):
+                if i != 0 and board[r+ri*i][c+ci*i] != 0:
+                    ok = False
+                elif not is_possible(board, r+ri*i, c+ci*i, code):
                     ok = False
             if ok: ret.append((r,c))
         elif name.startswith('Sang'):
@@ -46,7 +48,9 @@ def next_coordinates(board, current_row, current_col, code):
             ci = 1 if c < current_col else -1
             ok = True
             for i in range(0, 3):
-                if not is_possible(board, r+ri*i, c+ci*i, code):
+                if i != 0 and board[r+ri*i][c+ci*i] != 0:
+                    ok = False
+                elif not is_possible(board, r+ri*i, c+ci*i, code):
                     ok = False
             if ok: ret.append((r,c))
             continue
