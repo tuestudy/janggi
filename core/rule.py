@@ -26,6 +26,7 @@ def next_coordinates(board, current_row, current_col, code):
     r_esc = c_esc = False
     for r, c in coords:
         if name.startswith('Cha'):
+            print(name)
             if r_esc and c_esc : continue
             elif r == current_row and r_esc == False:
                 if is_possible(board, r, c, code) : ret.append((r,c))
@@ -33,13 +34,6 @@ def next_coordinates(board, current_row, current_col, code):
             elif c == current_col and c_esc == False:
                 if is_possible(board, r, c, code) : ret.append((r,c))
                 else: c_esc = True
-        elif name.startswith('Sa') or name.startswith('Kung'):
-            if 2 < r < 7: continue
-            if not (3<= c <= 5): continue
-            if is_possible(board, r, c, code):
-                ret.append((r,c))
-        elif name.startswith('Po'):
-            ret.append((r,c))
         elif name.startswith('Ma'):
             ri = 1 if r < current_row else -1
             ci = 1 if c < current_col else -1
@@ -56,6 +50,14 @@ def next_coordinates(board, current_row, current_col, code):
                 if not is_possible(board, r+ri*i, c+ci*i, code):
                     ok = False
             if ok: ret.append((r,c))
+            continue
+        elif name.startswith('Sa') or name.startswith('Kung'):
+            if 2 < r < 7: continue
+            if not (3<= c <= 5): continue
+            if is_possible(board, r, c, code):
+                ret.append((r,c))
+        elif name.startswith('Po'):
+            ret.append((r,c))
         elif is_possible(board, r, c, code) :
             ret.append((r,c))
     return ret
