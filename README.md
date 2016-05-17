@@ -39,6 +39,5 @@ pip install -r requirements.txt
 Windows:
 
 ```
-SET PYTHONPATH=..;core
-python -m janggi.gui.demo
+run.bat
 ```
