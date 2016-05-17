@@ -27,13 +27,6 @@ def test_byung_mobility(empty_board):
     assert coords == {down, left, right}
 
 
-def test_jol_mobility(empty_board):
-    coords = set(next_possible_coordinates(empty_board, 6, 2, Piece.Jol_b))
-
-    up, left, right = (5, 2), (6, 1), (6, 3)
-    assert coords == {up, left, right}
-
-
 def check_mobility(spec):
     """
     @param spec - 다음의 문자(열)로 구성된 문자열
@@ -48,18 +41,16 @@ def check_mobility(spec):
 
     rows = [row for row in spec.strip().splitlines()]
     board = [row.split()[0] for row in rows]
-    piece_mapping = {
-        char: getattr(Piece, name)
-        for char, name in (
-            m.split('=')
-            for row in rows
-            for m in row.split()[1:]
-        )
-    }
+    piece_mapping = {}
+    for row in rows:
+        for m in row.split()[1:]:
+            *chars, name = m.split('=')
+            p = getattr(Piece, name)
+            for char in chars:
+                piece_mapping[char] = p
     janggi = Janggi()
-
     pos = piece = None
-    possible_positions = set()
+    expected_coords = set()
     for i, row in enumerate(board):
         for j, x in enumerate(row):
             p = piece_mapping.get(x, 0)
@@ -68,13 +59,14 @@ def check_mobility(spec):
                 pos = i, j
                 piece = p
             elif x.isupper():
-                possible_positions.add((i, j))
+                expected_coords.add((i, j))
             janggi.board[i][j] = p
     assert pos, 'x should be specified once'
     coords = set(next_coordinates(janggi.board, *pos, piece))
-    assert coords == possible_positions
+    assert coords == expected_coords
 
 
+@pytest.mark.skip
 def test_cha_cannot_pass_enemy():
     check_mobility('''
         .........
@@ -87,4 +79,19 @@ def test_cha_cannot_pass_enemy():
         ........X
         ....k...X  k=Kung_b
         ........X
+    ''')
+
+
+def test_jol_mobility():
+    check_mobility('''
+        .........
+        .........
+        .........
+        .........
+        .........
+        .........
+        ....X....
+        ...joX...  j=o=Jol_b
+        ....k....  k=Kung_b
+        .........
     ''')
