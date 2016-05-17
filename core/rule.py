@@ -1,6 +1,9 @@
 #-*- encoding: utf-8 -*-
-from data import code2name, name2code, MAX_ROW, MAX_COL, \
-        is_valid_code, is_valid_coordinates, MOVES
+from data import (
+    code2name, name2code, MAX_ROW, MAX_COL,
+    is_valid_coordinates, MOVES,
+    PieceType,
+)
 from helper import create_empty_board, board_state
 import math
 
@@ -17,53 +20,92 @@ def is_enemy(board, r, c, code):
 def is_possible(board, r, c, code):
     return board[r][c] == 0 or is_enemy(board, r, c, code)
 
+
+coordinates_funcs = {}
+
+
+def next_candidates_for(*piece_types):
+    def deco(f):
+        def wrapper(board, current_row, current_col, code, coords):
+            f(board, current_row, current_col, code, coords)
+        for piece_type in piece_types:
+            coordinates_funcs[piece_type] = f
+        return wrapper
+    return deco
+
+
+@next_candidates_for(PieceType.Cha)
+def cha(board, current_row, current_col, code, coords):
+    r_esc = c_esc = False
+    for r, c in coords:
+        if r_esc and c_esc: continue
+        elif r == current_row and r_esc is False:
+            if is_possible(board, r, c, code):
+                yield r, c
+            else:
+                r_esc = True
+        elif c == current_col and c_esc is False:
+            if is_possible(board, r, c, code):
+                yield r, c
+            else:
+                c_esc = True
+
+
+@next_candidates_for(PieceType.Ma)
+def ma(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        ri = 1 if r < current_row else -1
+        ci = 1 if c < current_col else -1
+        ok = True
+        for i in range(0, 2):
+            if i != 0 and board[r+ri*i][c+ci*i] != 0:
+                ok = False
+            elif not is_possible(board, r+ri*i, c+ci*i, code):
+                ok = False
+        if ok:
+            yield r,c
+
+
+@next_candidates_for(PieceType.Sang)
+def sang(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        ri = 1 if r < current_row else -1
+        ci = 1 if c < current_col else -1
+        ok = True
+        for i in range(0, 3):
+            if not is_possible(board, r+ri*i, c+ci*i, code):
+                ok = False
+        if ok:
+            yield r, c
+
+
+@next_candidates_for(PieceType.Sa, PieceType.Kung)
+def kung(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        if 2 < r < 7: continue
+        if not (3<= c <= 5): continue
+        if is_possible(board, r, c, code):
+            yield r, c
+
+
+@next_candidates_for(PieceType.Po)
+def po(board, current_row, current_col, code, coords):
+    yield from coords
+
+
+@next_candidates_for(PieceType.Byung, PieceType.Jol)
+def byung(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        if is_possible(board, r, c, code):
+            yield r, c
+
 def next_coordinates(board, current_row, current_col, code):
-    ret = []
     coords = sorted_coord(
                     next_possible_coordinates(board, current_row, current_col, code),
                     (current_row, current_col))
     name = code2name(code)
-    r_esc = c_esc = False
-    for r, c in coords:
-        if name.startswith('Cha'):
-            if r_esc and c_esc : continue
-            elif r == current_row and r_esc == False:
-                if is_possible(board, r, c, code) : ret.append((r,c))
-                else: r_esc = True
-            elif c == current_col and c_esc == False:
-                if is_possible(board, r, c, code) : ret.append((r,c))
-                else: c_esc = True
-        elif name.startswith('Ma'):
-            ri = 1 if r < current_row else -1
-            ci = 1 if c < current_col else -1
-            ok = True
-            for i in range(0, 2):
-                if i != 0 and board[r+ri*i][c+ci*i] != 0:
-                    ok = False
-                elif not is_possible(board, r+ri*i, c+ci*i, code):
-                    ok = False
-            if ok: ret.append((r,c))
-        elif name.startswith('Sang'):
-            ri = 1 if r < current_row else -1
-            ci = 1 if c < current_col else -1
-            ok = True
-            for i in range(0, 3):
-                if i != 0 and board[r+ri*i][c+ci*i] != 0:
-                    ok = False
-                elif not is_possible(board, r+ri*i, c+ci*i, code):
-                    ok = False
-            if ok: ret.append((r,c))
-            continue
-        elif name.startswith('Sa') or name.startswith('Kung'):
-            if 2 < r < 7: continue
-            if not (3<= c <= 5): continue
-            if is_possible(board, r, c, code):
-                ret.append((r,c))
-        elif name.startswith('Po'):
-            ret.append((r,c))
-        elif is_possible(board, r, c, code) :
-            ret.append((r,c))
-    return ret
+    f = coordinates_funcs[code.piece_type]
+    return list(f(board, current_row, current_col, code, coords))
 
 def next_possible_coordinates(board, current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
