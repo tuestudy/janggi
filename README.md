@@ -33,7 +33,7 @@ pip install -r requirements.txt
 \*NIX:
 
 ```
-PYTHONPATH=..:core python -m janggi.gui.demo
+/bin/sh run.sh
 ```
 
 Windows:
