@@ -26,7 +26,6 @@ def next_coordinates(board, current_row, current_col, code):
     r_esc = c_esc = False
     for r, c in coords:
         if name.startswith('Cha'):
-            print(name)
             if r_esc and c_esc : continue
             elif r == current_row and r_esc == False:
                 if is_possible(board, r, c, code) : ret.append((r,c))
