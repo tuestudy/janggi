@@ -73,7 +73,9 @@ def sang(board, current_row, current_col, code, coords):
         ci = 1 if c < current_col else -1
         ok = True
         for i in range(0, 3):
-            if not is_possible(board, r+ri*i, c+ci*i, code):
+            if i != 0 and board[r+ri*i][c+ci*i] != 0:
+                ok = False
+            elif not is_possible(board, r+ri*i, c+ci*i, code):
                 ok = False
         if ok:
             yield r, c
