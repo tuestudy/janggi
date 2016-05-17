@@ -125,23 +125,17 @@ def next_possible_coordinates(board, current_row, current_col, code):
     else:
         return item_next_possible_coordinates(name, current_row, current_col)
 
-    return []
-
 
 def cha_next_possible_coordinates(row, col):
-    candidates = []
     for r in range(0, MAX_ROW+1):
         if r != row:
-            candidates.append((r, col))
+            yield r, col
     for c in range(0, MAX_COL+1):
         if c != col:
-            candidates.append((row, c))
-    return candidates
+            yield row, c
 
 
 def po_next_possible_coordinates(board, row, col):
-    candidates = []
-
     def _isPo(code):
         return code2name(code).startswith('Po')
 
@@ -153,7 +147,7 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((r, col))
+            yield r, col
             if board[r][col] != 0:
                 break
 
@@ -165,7 +159,7 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((r, col))
+            yield r, col
             if board[r][col] != 0:
                 break
 
@@ -177,7 +171,7 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((row, c))
+            yield row, c
             if board[row][c] != 0:
                 break
 
@@ -189,19 +183,15 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((row, c))
+            yield row, c
             if board[row][c] != 0:
                 break
 
-    return candidates
-
 
 def item_next_possible_coordinates(name, row, col):
-    candidates = []
     for r, c in MOVES[name.split('-')[0]]:
         if is_valid_coordinates(row + r, col + c):
-            candidates.append((row + r, col + c))
-    return candidates
+            yield row + r, col + c
 
 
 def update_possible_coordinates(board, name, row, col, code):
