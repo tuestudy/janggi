@@ -2,7 +2,7 @@ import pytest
 
 from data import Piece
 from janggi import Janggi
-from rule import next_possible_coordinates
+from rule import next_coordinates, next_possible_coordinates
 
 
 @pytest.fixture(scope='function')
@@ -27,8 +27,71 @@ def test_byung_mobility(empty_board):
     assert coords == {down, left, right}
 
 
-def test_jol_mobility(empty_board):
-    coords = set(next_possible_coordinates(empty_board, 6, 2, Piece.Jol_b))
+def check_mobility(spec):
+    """
+    @param spec - 다음의 문자(열)로 구성된 문자열
+        o       - 움직일 기물
+        대문자  - 갈 수 있는곳
+        소문자  - 갈 수 없는곳
+        .       - 빈칸 (갈 수 없는곳)
+        공백    - 무시됨
+        줄바꿈  - 행구분
+        c=Cha_a - 사용된 문자와 기물 매핑
+    """
 
-    up, left, right = (5, 2), (6, 1), (6, 3)
-    assert coords == {up, left, right}
+    rows = [row for row in spec.strip().splitlines()]
+    board = [row.split()[0] for row in rows]
+    piece_mapping = {}
+    for row in rows:
+        for m in row.split()[1:]:
+            *chars, name = m.split('=')
+            p = getattr(Piece, name)
+            for char in chars:
+                piece_mapping[char] = p
+    janggi = Janggi()
+    pos = piece = None
+    expected_coords = set()
+    for i, row in enumerate(board):
+        for j, x in enumerate(row):
+            p = piece_mapping.get(x, 0)
+            if x == 'o':
+                assert not pos, 'x should be specified once'
+                pos = i, j
+                piece = p
+            elif x.isupper():
+                expected_coords.add((i, j))
+            janggi.board[i][j] = p
+    assert pos, 'x should be specified once'
+    coords = set(next_coordinates(janggi.board, *pos, piece))
+    assert coords == expected_coords
+
+
+@pytest.mark.skip
+def test_cha_cannot_pass_enemy():
+    check_mobility('''
+        .........
+        ....q....  q=Kung_a
+        .........
+        .........
+        ........A  B=Cha_a
+        XXXXXXXXo  o=Cha_b
+        ........X
+        ........X
+        ....k...X  k=Kung_b
+        ........X
+    ''')
+
+
+def test_jol_mobility():
+    check_mobility('''
+        .........
+        .........
+        .........
+        .........
+        .........
+        .........
+        ....X....
+        ...joX...  j=o=Jol_b
+        ....k....  k=Kung_b
+        .........
+    ''')

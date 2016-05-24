@@ -1,2 +1,2 @@
 #!/bin/sh
-PYTHONPATH=core py.test -s
+PYTHONPATH=core py.test -s "$@"

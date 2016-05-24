@@ -1,64 +1,119 @@
-#-*- encoding: utf-8 -*-
-from data import code2name, name2code, MAX_ROW, MAX_COL, \
-        is_valid_code, is_valid_coordinates, MOVES
+from data import (
+    code2name, name2code, MAX_ROW, MAX_COL,
+    is_valid_coordinates, MOVES,
+    PieceType,
+)
 from helper import create_empty_board, board_state
 import math
 
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
+
 
 def sorted_coord(coords, origin):
     def distance(dest):
         return math.hypot(origin[0] - dest[0], origin[1] - dest[1])
     return sorted(coords, key=distance)
 
+
 def is_enemy(board, r, c, code):
     return code.team != board[r][c].team
+
 
 def is_possible(board, r, c, code):
     return board[r][c] == 0 or is_enemy(board, r, c, code)
 
-def next_coordinates(board, current_row, current_col, code):
-    ret = []
-    coords = sorted_coord(
-                    next_possible_coordinates(board, current_row, current_col, code),
-                    (current_row, current_col))
-    name = code2name(code)
+
+coordinates_funcs = {}
+
+
+def next_candidates_for(*piece_types):
+    def deco(f):
+        def wrapper(board, current_row, current_col, code, coords):
+            f(board, current_row, current_col, code, coords)
+        for piece_type in piece_types:
+            coordinates_funcs[piece_type] = f
+        return wrapper
+    return deco
+
+
+@next_candidates_for(PieceType.Cha)
+def cha(board, current_row, current_col, code, coords):
     r_esc = c_esc = False
     for r, c in coords:
-        if name.startswith('Cha'):
-            if r_esc and c_esc : continue
-            elif r == current_row and r_esc == False:
-                if is_possible(board, r, c, code) : ret.append((r,c))
-                else: r_esc = True
-            elif c == current_col and c_esc == False:
-                if is_possible(board, r, c, code) : ret.append((r,c))
-                else: c_esc = True
-        elif name.startswith('Sa') or name.startswith('Kung'):
-            if 2 < r < 7: continue
-            if not (3<= c <= 5): continue
+        if r_esc and c_esc:
+            continue
+        elif r == current_row and r_esc is False:
             if is_possible(board, r, c, code):
-                ret.append((r,c))
-        elif name.startswith('Po'):
-            ret.append((r,c))
-        elif name.startswith('Ma'):
-            ri = 1 if r < current_row else -1
-            ci = 1 if c < current_col else -1
-            ok = True
-            for i in range(0, 2):
-                if not is_possible(board, r+ri*i, c+ci*i, code):
-                    ok = False
-            if ok: ret.append((r,c))
-        elif name.startswith('Sang'):
-            ri = 1 if r < current_row else -1
-            ci = 1 if c < current_col else -1
-            ok = True
-            for i in range(0, 3):
-                if not is_possible(board, r+ri*i, c+ci*i, code):
-                    ok = False
-            if ok: ret.append((r,c))
-        elif is_possible(board, r, c, code) :
-            ret.append((r,c))
-    return ret
+                yield r, c
+            else:
+                r_esc = True
+        elif c == current_col and c_esc is False:
+            if is_possible(board, r, c, code):
+                yield r, c
+            else:
+                c_esc = True
+
+
+@next_candidates_for(PieceType.Ma)
+def ma(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        ri = 1 if r < current_row else -1
+        ci = 1 if c < current_col else -1
+        ok = True
+        for i in range(0, 2):
+            if i != 0 and board[r+ri*i][c+ci*i] != 0:
+                ok = False
+            elif not is_possible(board, r+ri*i, c+ci*i, code):
+                ok = False
+        if ok:
+            yield r, c
+
+
+@next_candidates_for(PieceType.Sang)
+def sang(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        ri = 1 if r < current_row else -1
+        ci = 1 if c < current_col else -1
+        ok = True
+        for i in range(0, 3):
+            if i != 0 and board[r+ri*i][c+ci*i] != 0:
+                ok = False
+            elif not is_possible(board, r+ri*i, c+ci*i, code):
+                ok = False
+        if ok:
+            yield r, c
+
+
+@next_candidates_for(PieceType.Sa, PieceType.Kung)
+def kung(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        if 2 < r < 7:
+            continue
+        if not (3 <= c <= 5):
+            continue
+        if is_possible(board, r, c, code):
+            yield r, c
+
+
+@next_candidates_for(PieceType.Po)
+def po(board, current_row, current_col, code, coords):
+    yield from coords
+
+
+@next_candidates_for(PieceType.Byung, PieceType.Jol)
+def byung(board, current_row, current_col, code, coords):
+    for r, c in coords:
+        if is_possible(board, r, c, code):
+            yield r, c
+
+
+def next_coordinates(board, current_row, current_col, code):
+    coords = sorted_coord(
+        next_possible_coordinates(board, current_row, current_col, code),
+        (current_row, current_col))
+    f = coordinates_funcs[code.piece_type]
+    return list(f(board, current_row, current_col, code, coords))
+
 
 def next_possible_coordinates(board, current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
@@ -70,21 +125,17 @@ def next_possible_coordinates(board, current_row, current_col, code):
     else:
         return item_next_possible_coordinates(name, current_row, current_col)
 
-    return []
 
 def cha_next_possible_coordinates(row, col):
-    candidates = []
     for r in range(0, MAX_ROW+1):
         if r != row:
-            candidates.append( (r, col) )
+            yield r, col
     for c in range(0, MAX_COL+1):
         if c != col:
-            candidates.append( (row, c) )
-    return candidates
+            yield row, c
+
 
 def po_next_possible_coordinates(board, row, col):
-    candidates = []
-
     def _isPo(code):
         return code2name(code).startswith('Po')
 
@@ -96,7 +147,7 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((r, col))
+            yield r, col
             if board[r][col] != 0:
                 break
 
@@ -108,7 +159,7 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((r, col))
+            yield r, col
             if board[r][col] != 0:
                 break
 
@@ -120,7 +171,7 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((row, c))
+            yield row, c
             if board[row][c] != 0:
                 break
 
@@ -132,21 +183,21 @@ def po_next_possible_coordinates(board, row, col):
             blocked = True
             continue
         if blocked:
-            candidates.append((row, c))
+            yield row, c
             if board[row][c] != 0:
                 break
 
-    return candidates
 
 def item_next_possible_coordinates(name, row, col):
-    candidates = []
     for r, c in MOVES[name.split('-')[0]]:
         if is_valid_coordinates(row + r, col + c):
-            candidates.append((row + r, col + c))
-    return candidates
+            yield row + r, col + c
+
 
 def update_possible_coordinates(board, name, row, col, code):
-    print("{0} can go to those coordinates from {1}, {2}: ".format(name, row, col))
+    print("{0} can go to those coordinates from {1}, {2}: ".format(
+        name, row, col
+    ))
     for r, c in next_possible_coordinates(board, row, col, code):
         board[r][c] = 100
 
