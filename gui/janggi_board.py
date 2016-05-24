@@ -59,8 +59,8 @@ class JanggiBoard:
             command=self.on_change_turn_button_pressed,
         )
 
-        self.label_colors = { 'a': 'red', 'b':'blue', 'default': 'gray' }
         self.turn_0_label = Label(text="       ")
+        self.label_colors = { 'a': 'red', 'b':'blue', 'default': self.turn_0_label['bg'] }
         self.turn_1_label = Label(text="       ", bg=self.label_colors['b'])
 
         self.draw_hlines()
