@@ -9,7 +9,7 @@ root = Tk()
 root.title(u'조선장기')
 root.bind('<Escape>', lambda e: root.quit())
 
-b = JanggiBoard()
+b = JanggiBoard(root)
 b.init_gui()
 
 root.mainloop()

@@ -43,7 +43,7 @@ PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'name', 'item'))
 
 class JanggiBoard:
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, master, *args, **kwargs):
         self.photoimages = {
             piece: ImageTk.PhotoImage(Image.open(
                 resource_dir / (filename + '.png')
@@ -51,17 +51,19 @@ class JanggiBoard:
             for piece, filename in images.items()
         }
         self.canvas = Canvas(
+            master=master,
             width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
             background=BOARD_COLOR, *args, **kwargs
         )
         self.change_turn_button = Button(
+            master=master,
             text='한수쉼',
             command=self.on_change_turn_button_pressed,
         )
 
-        self.turn_0_label = Label(text="       ")
-        self.label_colors = { 'a': 'red', 'b':'blue', 'default': self.turn_0_label['bg'] }
-        self.turn_1_label = Label(text="       ", bg=self.label_colors['b'])
+        self.label_colors = { 'a': 'red', 'b':'blue', 'default': master['bg'] }
+        self.turn_0_label = Label(master=master, text="       ")
+        self.turn_1_label = Label(master=master, text="       ", bg=self.label_colors['b'])
 
         self.draw_hlines()
         self.draw_vlines()
