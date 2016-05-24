@@ -39,19 +39,20 @@ def next_candidates_for(*piece_types):
 @next_candidates_for(PieceType.Cha)
 def cha(board, current_row, current_col, code, coords):
     r_esc = c_esc = False
-    for r, c in coords:
-        if r_esc and c_esc:
-            continue
-        elif r == current_row and r_esc is False:
+    coords = [
+        [(i, j) for i, j in coords if j < current_col],
+        [(i, j) for i, j in coords if j > current_col],
+        [(i, j) for i, j in coords if i > current_row],
+        [(i, j) for i, j in coords if i < current_row]
+    ]
+    for coord in coords:
+        for r, c in coord:
             if is_possible(board, r, c, code):
                 yield r, c
+                if board[r][c] != 0 and is_enemy(board, r, c, code):
+                    break
             else:
-                r_esc = True
-        elif c == current_col and c_esc is False:
-            if is_possible(board, r, c, code):
-                yield r, c
-            else:
-                c_esc = True
+                break
 
 
 @next_candidates_for(PieceType.Ma)

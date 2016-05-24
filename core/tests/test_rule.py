@@ -66,14 +66,13 @@ def check_mobility(spec):
     assert coords == expected_coords
 
 
-@pytest.mark.skip
 def test_cha_cannot_pass_enemy():
     check_mobility('''
         .........
         ....q....  q=Kung_a
         .........
         .........
-        ........A  B=Cha_a
+        ........A  A=Cha_a
         XXXXXXXXo  o=Cha_b
         ........X
         ........X
