@@ -160,7 +160,6 @@ class JanggiBoard:
         else:
             self.turn_0_label.configure(bg=self.label_colors['default'])
             self.turn_1_label.configure(bg=self.label_colors[turn])
-        root.title('조선장기 {}'.format({'a': '漢', 'b': '楚'}[turn]))
 
     def show_candidates(self, e):
         r, c, p, pi = self.current_piece

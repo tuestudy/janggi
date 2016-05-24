@@ -6,7 +6,7 @@ from .janggi_board import JanggiBoard
 
 root = Tk()
 
-root.title(u'조선장기 楚')
+root.title(u'조선장기')
 root.bind('<Escape>', lambda e: root.quit())
 
 b = JanggiBoard()
