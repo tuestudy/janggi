@@ -79,7 +79,7 @@ class JanggiBoard:
             turn_change_callback=self.on_turn_changed)
         self.board_state.reset()
 
-    def initGui(self):
+    def init_gui(self):
         self.canvas.grid(row=0, column=0, rowspan=3)
         self.turn_0_label.grid(row=0, column=1)
         self.change_turn_button.grid(row=1, column=1)
@@ -196,6 +196,6 @@ class JanggiBoard:
         self.board_state.move(old_pos, new_pos)
 
 b = JanggiBoard()
-b.initGui()
+b.init_gui()
 
 root.mainloop()
