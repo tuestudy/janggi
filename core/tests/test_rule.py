@@ -112,8 +112,7 @@ def test_kung_cannot_cross_line():
     ''')
 
 
-@pytest.mark.skip
-def test_cha_in_palace():
+def test_cha_at_palace_center():
     check_mobility(r'''
         ...\X/...
         ...-X-...
@@ -127,6 +126,8 @@ def test_cha_in_palace():
         ...XXX...
     ''')
 
+@pytest.mark.skip
+def test_cha_in_palace():
     check_mobility(r'''
         ...\|X...
         ...-+X...

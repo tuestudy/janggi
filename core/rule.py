@@ -45,6 +45,7 @@ def cha(board, current_row, current_col, code, coords):
         [(i, j) for i, j in coords if i > current_row],
         [(i, j) for i, j in coords if i < current_row]
     ]
+
     for coord in coords:
         for r, c in coord:
             if is_possible(board, r, c, code):
@@ -134,6 +135,11 @@ def cha_next_possible_coordinates(row, col):
     for c in range(0, MAX_COL+1):
         if c != col:
             yield row, c
+    if (row == 1 and col == 4) or (row == 8 and col == 4):
+        yield row - 1, col - 1
+        yield row - 1, col + 1
+        yield row + 1, col - 1
+        yield row + 1, col + 1
 
 
 def po_next_possible_coordinates(board, row, col):
