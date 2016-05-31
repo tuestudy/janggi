@@ -8,6 +8,19 @@ import math
 
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
 
+diagonal_moves = {
+    (0,3): [[(1,4),(2,5)]],
+    (0,5): [[(1,4),(2,3)]],
+    (1,4): [[(0,3)], [(0,5)], [(2,3)], [(2,5)]],
+    (2,3): [[(1,4),(0,5)]],
+    (2,5): [[(1,4),(0,3)]],
+
+    (7,3): [[(8,4),(9,5)]],
+    (7,5): [[(8,4),(9,3)]],
+    (8,4): [[(7,3)], [(7,5)], [(9,3)], [(9,5)]],
+    (9,3): [[(8,4),(7,5)]],
+    (9,5): [[(8,4),(7,3)]],
+}
 
 def sorted_coord(coords, origin):
     def distance(dest):
@@ -88,13 +101,16 @@ def sang(board, current_row, current_col, code, coords):
 
 @next_candidates_for(PieceType.Sa, PieceType.Kung)
 def kung(board, current_row, current_col, code, coords):
+    dmoves = [xs[0] for xs in
+              diagonal_moves.get((current_row, current_col), ())]
     for r, c in coords:
         if 2 < r < 7:
             continue
         if not (3 <= c <= 5):
             continue
         if is_possible(board, r, c, code):
-            yield r, c
+            if r == current_row or c == current_col or (r, c) in dmoves:
+                yield r, c
 
 
 @next_candidates_for(PieceType.Po)

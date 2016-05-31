@@ -96,7 +96,6 @@ def test_jol_mobility():
     ''')
 
 
-@pytest.mark.skip
 def test_kung_cannot_cross_line():
     check_mobility(r'''
         ...\|/...
