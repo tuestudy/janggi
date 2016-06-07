@@ -63,9 +63,7 @@ def cha(board, current_row, current_col, code, coords):
         for r, c in coord:
             if is_possible(board, r, c, code):
                 yield r, c
-                if board[r][c] != 0:
-                    break
-            else:
+            if board[r][c] != 0:
                 break
 
 
