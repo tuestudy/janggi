@@ -139,7 +139,6 @@ def test_cha_at_palace_center():
     ''')
 
 
-@pytest.mark.skip
 def test_cha_in_palace():
     check_mobility(r'''
         ...\|X...
