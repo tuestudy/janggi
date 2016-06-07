@@ -53,10 +53,14 @@ def next_candidates_for(*piece_types):
 def cha(board, current_row, current_col, code, coords):
     r_esc = c_esc = False
     coords = [
-        [(i, j) for i, j in coords if j < current_col],
-        [(i, j) for i, j in coords if j > current_col],
-        [(i, j) for i, j in coords if i > current_row],
-        [(i, j) for i, j in coords if i < current_row]
+        [(i, j) for i, j in coords if i == current_row and j < current_col],
+        [(i, j) for i, j in coords if i == current_row and j > current_col],
+        [(i, j) for i, j in coords if i > current_row and j == current_col],
+        [(i, j) for i, j in coords if i < current_row and j == current_col],
+        [(i, j) for i, j in coords if i < current_row and j < current_col],
+        [(i, j) for i, j in coords if i < current_row and j > current_col],
+        [(i, j) for i, j in coords if i > current_row and j < current_col],
+        [(i, j) for i, j in coords if i > current_row and j > current_col],
     ]
 
     for coord in coords:
