@@ -72,7 +72,7 @@ class JanggiBoard:
         self.canvas.bind('<ButtonRelease-1>', self.on_button_released)
         self.canvas.bind('<Button1-Motion>', self.on_button_motion)
         self.board_state = Janggi(
-            lambda x: self.update_canvas(self.board_state),
+            lambda x: self.update_canvas(),
             turn_change_callback=self.on_turn_changed)
         self.board_state.reset()
 
@@ -106,9 +106,9 @@ class JanggiBoard:
                 MARGIN_TOP + 3 * CELL_SIZE,
                 y + 2 * CELL_SIZE)
 
-    def put_pieces(self, board):
+    def put_pieces(self):
         d = self.pieces = {}  # Map canvas item -> PieceInfo(row, col, piece)
-        for i, row in enumerate(board):
+        for i, row in enumerate(self.board_state.board):
             for j, piece in enumerate(row):
                 if not piece:
                     continue
@@ -119,12 +119,12 @@ class JanggiBoard:
                     tags='piece')
                 d[item] = PieceInfo(row=i, col=j, name=piece, item=item)
 
-    def update_canvas(self, board):
+    def update_canvas(self):
         self.current_piece = None
         self.canvas.delete('piece')
         self.candidates = {}
         self.canvas.delete('candidate')
-        self.put_pieces(self.board_state.board)
+        self.put_pieces()
 
     def get_current_piece(self):
         item = self.canvas.find_withtag('current')
