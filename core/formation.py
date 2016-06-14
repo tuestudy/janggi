@@ -52,10 +52,8 @@ CHO_INITIAL_STATE = [
 
 
 def get_han_formation(formation_type):
-    formation = HAN_INITIAL_STATE
-    if formation_type == FormationType.InsideSang:
-        pass
-    elif formation_type == FormationType.OutsideSang:
+    formation = list(HAN_INITIAL_STATE)
+    if formation_type == FormationType.OutsideSang:
         formation[1] = (0, 1, Piece.Sang_a)
         formation[2] = (0, 2, Piece.Ma_a)
         formation[5] = (0, 6, Piece.Ma_a)
@@ -63,10 +61,8 @@ def get_han_formation(formation_type):
     return formation
 
 def get_cho_formation(formation_type):
-    formation = CHO_INITIAL_STATE
-    if formation_type == FormationType.InsideSang:
-        pass
-    elif formation_type == FormationType.OutsideSang:
+    formation = list(CHO_INITIAL_STATE)
+    if formation_type == FormationType.OutsideSang:
         formation[1] = (9, 1, Piece.Sang_b)
         formation[2] = (9, 2, Piece.Ma_b)
         formation[5] = (9, 6, Piece.Ma_b)
