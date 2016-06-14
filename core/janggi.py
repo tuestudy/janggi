@@ -45,9 +45,9 @@ class Janggi(object):
         return piece.team == self.turn
 
     @broadcasted
-    def reset(self):
+    def reset(self, han_formation, cho_formation):
         self.board = create_empty_board()
-        for row, col, code in A_INITIAL_STATE+B_INITIAL_STATE:
+        for row, col, code in han_formation+cho_formation:
             self.board[row][col] = code
 
     @broadcasted

@@ -7,7 +7,7 @@ from collections import namedtuple
 from PIL import ImageTk, Image
 from tkinter import Button, Label, Canvas, TRUE, BOTH, Y, Grid
 
-from ..core.data import Piece
+from ..core.data import Piece, A_INITIAL_STATE, B_INITIAL_STATE
 from ..core.janggi import Janggi
 from ..core.rule import next_coordinates
 
@@ -74,7 +74,7 @@ class JanggiBoard:
         self.board_state = Janggi(
             lambda x: self.update_canvas(),
             turn_change_callback=self.on_turn_changed)
-        self.board_state.reset()
+        self.board_state.reset(A_INITIAL_STATE, B_INITIAL_STATE)
 
     def init_gui(self):
         self.canvas.grid(row=0, column=0, rowspan=3)
