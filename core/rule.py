@@ -117,7 +117,9 @@ def kung(board, current_row, current_col, code, coords):
 
 @next_candidates_for(PieceType.Po)
 def po(board, current_row, current_col, code, coords):
-    yield from coords
+    for r, c in coords:
+        if is_possible(board, r, c, code):
+            yield r, c
 
 
 @next_candidates_for(PieceType.Byung, PieceType.Jol)
@@ -210,8 +212,8 @@ def po_next_possible_coordinates(board, row, col):
             if board[row][c] != 0:
                 break
 
-    blocked = False
     for xs in diagonal_moves.get((row, col), ()):
+        blocked = False
         for r, c in xs:
             if _isPo(board[r][c]):
                 break
