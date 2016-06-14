@@ -210,6 +210,19 @@ def po_next_possible_coordinates(board, row, col):
             if board[row][c] != 0:
                 break
 
+    blocked = False
+    for xs in diagonal_moves.get((row, col), ()):
+        for r, c in xs:
+            if _isPo(board[r][c]):
+                break
+            if not blocked and board[r][c] != 0:
+                blocked = True
+                continue
+            if blocked:
+                yield r, c
+                if board[r][c] != 0:
+                    break
+
 
 def item_next_possible_coordinates(name, row, col):
     for r, c in MOVES[name.split('-')[0]]:
