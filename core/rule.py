@@ -71,28 +71,20 @@ def cha(board, current_row, current_col, code, coords):
                 break
 
 
-@next_candidates_for(PieceType.Ma)
-def ma(board, current_row, current_col, code, coords):
+@next_candidates_for(PieceType.Ma, PieceType.Sang)
+def ma_sang(board, current_row, current_col, code, coords):
+    name = code2name(code)
+    step = 0
+    if name.startswith('Ma'):
+        step = 2
+    elif name.startswith('Sang'):
+        step = 3
+
     for r, c in coords:
         ri = 1 if r < current_row else -1
         ci = 1 if c < current_col else -1
         ok = True
-        for i in range(0, 2):
-            if i != 0 and board[r+ri*i][c+ci*i] != 0:
-                ok = False
-            elif not is_possible(board, r+ri*i, c+ci*i, code):
-                ok = False
-        if ok:
-            yield r, c
-
-
-@next_candidates_for(PieceType.Sang)
-def sang(board, current_row, current_col, code, coords):
-    for r, c in coords:
-        ri = 1 if r < current_row else -1
-        ci = 1 if c < current_col else -1
-        ok = True
-        for i in range(0, 3):
+        for i in range(0, step):
             if i != 0 and board[r+ri*i][c+ci*i] != 0:
                 ok = False
             elif not is_possible(board, r+ri*i, c+ci*i, code):
