@@ -131,7 +131,7 @@ class JanggiBoard:
         item = self.canvas.find_withtag('current')
         if len(item) == 0:
             return None
-        if not 'piece' in self.canvas.gettags(item[0]):
+        if 'piece' not in self.canvas.gettags(item[0]):
             return None
         current_piece = self.pieces[item[0]]
         if not self.board_state.can_move(current_piece.name):
