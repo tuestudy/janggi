@@ -64,7 +64,8 @@ class JanggiBoard:
 
         self.label_colors = {'a': 'red', 'b': 'blue', 'default': master['bg']}
         self.turn_0_label = Label(master=master, text="       ")
-        self.turn_1_label = Label(master=master, text="       ", bg=self.label_colors['b'])
+        self.turn_1_label = Label(master=master, text="       ",
+                                  bg=self.label_colors['b'])
 
         self.draw_hlines()
         self.draw_vlines()
@@ -86,12 +87,14 @@ class JanggiBoard:
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
             y = MARGIN_TOP + i * CELL_SIZE
-            self.canvas.create_line(MARGIN_LEFT, y, MARGIN_LEFT + BOARD_WIDTH, y)
+            self.canvas.create_line(MARGIN_LEFT, y,
+                                    MARGIN_LEFT + BOARD_WIDTH, y)
 
     def draw_vlines(self):
         for i in range(VERTICAL_LINES):
             x = MARGIN_LEFT + i * CELL_SIZE
-            self.canvas.create_line(x, MARGIN_TOP, x, MARGIN_TOP + BOARD_HEIGHT)
+            self.canvas.create_line(x, MARGIN_TOP,
+                                    x, MARGIN_TOP + BOARD_HEIGHT)
 
     def draw_palaces(self):
         for i in (0, 7):
@@ -150,7 +153,8 @@ class JanggiBoard:
 
     def on_button_motion(self, e):
         if self.current_piece:
-            self.canvas.move(self.current_piece.item, e.x - self.x, e.y - self.y)
+            self.canvas.move(self.current_piece.item,
+                             e.x - self.x, e.y - self.y)
             self.x, self.y = e.x, e.y
 
     def on_change_turn_button_pressed(self):
@@ -168,7 +172,8 @@ class JanggiBoard:
         r, c, p, pi = self.current_piece
         self.canvas.tag_raise(pi)
         self.candidates = {}
-        for i, j in [(r, c)] + next_coordinates(self.board_state.board, r, c, p):
+        coords = [(r, c)] + next_coordinates(self.board_state.board, r, c, p)
+        for i, j in coords:
             item = self.canvas.create_oval(
                 MARGIN_LEFT + j * CELL_SIZE - CELL_SIZE // 4,
                 MARGIN_TOP + i * CELL_SIZE - CELL_SIZE // 4,
@@ -187,7 +192,8 @@ class JanggiBoard:
         candidates = self.canvas.find_withtag('candidate')
         if len(candidates) != 0:
             c = min(candidates, key=_distance)
-            new_pos = self.candidates[c] if (_distance(c) < CELL_SIZE) else old_pos
+            new_pos = (self.candidates[c] if (_distance(c) < CELL_SIZE) else
+                       old_pos)
         else:
             new_pos = old_pos
         self.board_state.move(old_pos, new_pos)
