@@ -22,6 +22,7 @@ diagonal_moves = {
     (9,5): [[(8,4),(7,3)]],
 }
 
+
 def sorted_coord(coords, origin):
     def distance(dest):
         return math.hypot(origin[0] - dest[0], origin[1] - dest[1])

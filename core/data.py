@@ -10,8 +10,10 @@ MAX_COL = 8
   * B 가 하단(Row 가 큰 쪽) 楚
 """
 
+
 class PieceType(enum.IntEnum):
     Kung, Cha, Po, Ma, Sang, Sa, Byung, Jol = range(1, 9)
+
 
 class Piece(enum.IntEnum):
     __ = 0
@@ -52,6 +54,7 @@ Piece.Sa_b.piece_type = PieceType.Sa
 
 assert len(CODE_NAMES) == 7 + 7 + 1
 
+
 def is_valid_code(c):
     try:
         Piece(c)
@@ -59,8 +62,10 @@ def is_valid_code(c):
     except ValueError:
         return False
  
+
 def is_valid_coordinates(r, c):
     return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
+
 
 def code2name(c):
     try:
@@ -68,6 +73,7 @@ def code2name(c):
         return name.replace('_', '-') if c else name
     except ValueError:
         return 'X'
+
 
 def name2code(name):
     return getattr(Piece, name.replace('-', '_')).value

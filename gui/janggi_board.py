@@ -41,6 +41,7 @@ images = {
 
 PieceInfo = namedtuple('PieceInfo', ('row', 'col', 'name', 'item'))
 
+
 class JanggiBoard:
 
     def __init__(self, master, *args, **kwargs):
