@@ -1,4 +1,4 @@
-#-*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 from data import code2name, MAX_ROW, MAX_COL
 
 
@@ -7,7 +7,7 @@ def create_empty_board():
 
 
 def board_state(board):
-    return 'A\n' + '\n'.join(' '.join(map(lambda c: '[%7s]' %code2name(c), row)) for row in board) + '\nB\n'
+    return 'A\n' + '\n'.join(' '.join(map(lambda c: '[%7s]' % code2name(c), row)) for row in board) + '\nB\n'
 
 
 def is_valid_position(row, col):
