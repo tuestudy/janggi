@@ -85,9 +85,9 @@ def ma_sang(board, current_row, current_col, code, coords):
         ci = 1 if c < current_col else -1
         ok = True
         for i in range(0, step):
-            if i != 0 and board[r+ri*i][c+ci*i] != 0:
+            if i != 0 and board[r + ri * i][c + ci * i] != 0:
                 ok = False
-            elif not is_possible(board, r+ri*i, c+ci*i, code):
+            elif not is_possible(board, r + ri * i, c + ci * i, code):
                 ok = False
         if ok:
             yield r, c
@@ -141,10 +141,10 @@ def next_possible_coordinates(board, current_row, current_col, code):
 
 
 def cha_next_possible_coordinates(row, col):
-    for r in range(0, MAX_ROW+1):
+    for r in range(0, MAX_ROW + 1):
         if r != row:
             yield r, col
-    for c in range(0, MAX_COL+1):
+    for c in range(0, MAX_COL + 1):
         if c != col:
             yield row, c
     for xs in diagonal_moves.get((row, col), ()):
@@ -157,7 +157,7 @@ def po_next_possible_coordinates(board, row, col):
         return code2name(code).startswith('Po')
 
     blocked = False
-    for r in range(row+1, MAX_ROW+1):
+    for r in range(row + 1, MAX_ROW + 1):
         if _isPo(board[r][col]):
             break
         if not blocked and board[r][col] != 0:
@@ -169,7 +169,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for r in range(row-1, 0-1, -1):
+    for r in range(row - 1, -1, -1):
         if _isPo(board[r][col]):
             break
         if not blocked and board[r][col] != 0:
@@ -181,7 +181,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for c in range(col+1, MAX_COL+1):
+    for c in range(col + 1, MAX_COL + 1):
         if _isPo(board[row][c]):
             break
         if not blocked and board[row][c] != 0:
@@ -193,7 +193,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for c in range(col-1, 0-1, -1):
+    for c in range(col - 1, -1, -1):
         if _isPo(board[row][c]):
             break
         if not blocked and board[row][c] != 0:

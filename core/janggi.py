@@ -18,7 +18,7 @@ class Janggi(object):
             self,
             change_callback=None,
             turn_change_callback=None):
-        self.board = [[EMPTY]*9 for _ in range(10)]
+        self.board = [[EMPTY] * 9 for _ in range(10)]
         self.on_changed = change_callback
         self.on_turn_changed = turn_change_callback
         self.turn = 'b'  # b(楚) -> a(漢) -> b -> a -> ..
@@ -46,7 +46,7 @@ class Janggi(object):
     @broadcasted
     def reset(self, han_formation, cho_formation):
         self.board = create_empty_board()
-        for row, col, code in han_formation+cho_formation:
+        for row, col, code in han_formation + cho_formation:
             self.board[row][col] = code
 
     @broadcasted

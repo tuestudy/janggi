@@ -3,7 +3,7 @@ from data import code2name, MAX_ROW, MAX_COL
 
 
 def create_empty_board():
-    return [[0]*9 for _ in range(10)]
+    return [[0] * 9 for _ in range(10)]
 
 
 def board_state(board):
