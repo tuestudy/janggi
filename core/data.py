@@ -61,7 +61,7 @@ def is_valid_code(c):
         return True
     except ValueError:
         return False
- 
+
 
 def is_valid_coordinates(r, c):
     return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
@@ -150,5 +150,3 @@ MOVES = {
     ],
 }
 MOVES = {pt.name: moves for pt, moves in MOVES.items()}
-
-
