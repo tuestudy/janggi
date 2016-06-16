@@ -19,6 +19,7 @@ class Piece(enum.IntEnum):
     __ = 0
     Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Byung_a = range(1, 8)
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
+
     @property
     def score(self):
         return self.piece_type.score

@@ -32,7 +32,7 @@ def check_outside_sang(turn, board):
 def test_inside_sang_formation_both():
     j = janggi.Janggi(None)
     j.reset(get_han_formation(FormationType.InsideSang),
-        get_cho_formation(FormationType.InsideSang))
+            get_cho_formation(FormationType.InsideSang))
     check_inside_sang('a', j.board)
     check_inside_sang('b', j.board)
 
@@ -40,7 +40,7 @@ def test_inside_sang_formation_both():
 def test_outside_sang_formation_both():
     j = janggi.Janggi(None)
     j.reset(get_han_formation(FormationType.OutsideSang),
-        get_cho_formation(FormationType.OutsideSang))
+            get_cho_formation(FormationType.OutsideSang))
     check_outside_sang('a', j.board)
     check_outside_sang('b', j.board)
 
@@ -48,6 +48,6 @@ def test_outside_sang_formation_both():
 def test_inside_sang_x_outside_sang_formation():
     j = janggi.Janggi(None)
     j.reset(get_han_formation(FormationType.InsideSang),
-        get_cho_formation(FormationType.OutsideSang))
+            get_cho_formation(FormationType.OutsideSang))
     check_inside_sang('a', j.board)
     check_outside_sang('b', j.board)
