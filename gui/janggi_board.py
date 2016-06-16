@@ -62,7 +62,7 @@ class JanggiBoard:
             command=self.on_change_turn_button_pressed,
         )
 
-        self.label_colors = { 'a': 'red', 'b':'blue', 'default': master['bg'] }
+        self.label_colors = {'a': 'red', 'b': 'blue', 'default': master['bg']}
         self.turn_0_label = Label(master=master, text="       ")
         self.turn_1_label = Label(master=master, text="       ", bg=self.label_colors['b'])
 
