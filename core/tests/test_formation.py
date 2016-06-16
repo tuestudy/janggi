@@ -1,5 +1,3 @@
-import pytest
-
 import janggi
 from data import Piece
 from formation import FormationType, get_han_formation, get_cho_formation

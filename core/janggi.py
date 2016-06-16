@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-from data import A_INITIAL_STATE, B_INITIAL_STATE, is_valid_coordinates
 from helper import create_empty_board, board_state
 from rule import next_coordinates
 

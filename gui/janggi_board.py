@@ -5,7 +5,7 @@ from pathlib import Path
 from collections import namedtuple
 
 from PIL import ImageTk, Image
-from tkinter import Button, Label, Canvas, TRUE, BOTH, Y, Grid
+from tkinter import Button, Label, Canvas
 
 from ..core.data import Piece, A_INITIAL_STATE, B_INITIAL_STATE
 from ..core.janggi import Janggi
