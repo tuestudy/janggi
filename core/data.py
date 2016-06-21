@@ -14,6 +14,14 @@ MAX_COL = 8
 class PieceType(enum.IntEnum):
     Kung, Cha, Po, Ma, Sang, Sa, Byung, Jol = range(1, 9)
 
+PieceType.Kung.score = 0
+PieceType.Cha.score = 13
+PieceType.Po.score = 7
+PieceType.Ma.score = 5
+PieceType.Sang.score = 3
+PieceType.Sa.score = 3
+PieceType.Byung.score = PieceType.Jol.score = 2
+
 
 class Piece(enum.IntEnum):
     __ = 0
@@ -24,35 +32,17 @@ class Piece(enum.IntEnum):
     def score(self):
         return self.piece_type.score
 
+    @property
+    def team(self):
+        return self.name[-1]
+
+    @property
+    def piece_type(self):
+        t = self.name.split('_')[0]
+        return PieceType[t]
+
+
 CODE_NAMES = [p.name.replace('_', '-') if p else p.name for p in Piece]
-for p in Piece:
-    if p:
-        p.team = p.name[-1]
-
-PieceType.Kung.score = 0
-PieceType.Cha.score = 13
-PieceType.Po.score = 7
-PieceType.Ma.score = 5
-PieceType.Sang.score = 3
-PieceType.Sa.score = 3
-PieceType.Byung.score = PieceType.Jol.score = 2
-
-Piece.Kung_a.piece_type = PieceType.Kung
-Piece.Kung_b.piece_type = PieceType.Kung
-Piece.Cha_a.piece_type = PieceType.Cha
-Piece.Cha_b.piece_type = PieceType.Cha
-Piece.Po_a.piece_type = PieceType.Po
-Piece.Po_b.piece_type = PieceType.Po
-Piece.Ma_a.piece_type = PieceType.Ma
-Piece.Ma_b.piece_type = PieceType.Ma
-Piece.Sang_a.piece_type = PieceType.Sang
-Piece.Sang_b.piece_type = PieceType.Sang
-Piece.Byung_a.piece_type = PieceType.Byung
-Piece.Jol_b.piece_type = PieceType.Jol
-Piece.Sa_a.piece_type = PieceType.Sa
-Piece.Sa_b.piece_type = PieceType.Sa
-
-
 assert len(CODE_NAMES) == 7 + 7 + 1
 
 
