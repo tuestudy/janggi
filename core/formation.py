@@ -4,10 +4,10 @@ import enum
 from data import Piece
 
 # Formation
-#   * left_sang 왼상차림
-#   * right_sang 오른상차림
-#   * inside_sang 안상차림  (default)
-#   * outside_sang 바깥상차림
+#   * left_sang 왼상차림, 상마상마
+#   * right_sang 오른상차림, 마상마상
+#   * inside_sang 안상차림  (default), 마상상마
+#   * outside_sang 바깥상차림, 상마마상
 
 
 class FormationType(enum.IntEnum):
@@ -54,19 +54,31 @@ CHO_INITIAL_STATE = [
 
 def get_han_formation(formation_type):
     formation = list(HAN_INITIAL_STATE)
-    if formation_type == FormationType.OutsideSang:
+    if formation_type == FormationType.OutsideSang: # 상마마상
         formation[1] = (0, 1, Piece.Sang_a)
         formation[2] = (0, 2, Piece.Ma_a)
         formation[5] = (0, 6, Piece.Ma_a)
         formation[6] = (0, 7, Piece.Sang_a)
-    return formation
+    elif formation_type == FormationType.LeftSang:  #   ∇
+        formation[5] = (0, 6, Piece.Ma_a)           # 마상마상
+        formation[6] = (0, 7, Piece.Sang_a)
+    elif formation_type == FormationType.RightSang: #   ∇
+        formation[1] = (0, 1, Piece.Sang_a)         # 상마상마
+        formation[2] = (0, 2, Piece.Ma_a)
+    return formation                                # 마상상마
 
 
 def get_cho_formation(formation_type):
     formation = list(CHO_INITIAL_STATE)
-    if formation_type == FormationType.OutsideSang:
+    if formation_type == FormationType.OutsideSang: # 상마마상
         formation[1] = (9, 1, Piece.Sang_b)
         formation[2] = (9, 2, Piece.Ma_b)
         formation[5] = (9, 6, Piece.Ma_b)
         formation[6] = (9, 7, Piece.Sang_b)
-    return formation
+    elif formation_type == FormationType.LeftSang:  # 상마상마
+        formation[1] = (9, 1, Piece.Sang_b)         #   ∆
+        formation[2] = (9, 2, Piece.Ma_b)
+    elif formation_type == FormationType.RightSang: # 마상마상
+        formation[5] = (9, 6, Piece.Ma_b)           #   ∆
+        formation[6] = (9, 7, Piece.Sang_b)
+    return formation                                # 마상상마
