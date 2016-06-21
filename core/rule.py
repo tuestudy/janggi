@@ -1,7 +1,7 @@
 from data import (
     code2name, name2code, MAX_ROW, MAX_COL,
     is_valid_coordinates, MOVES,
-    PieceType,
+    Piece, PieceType,
 )
 from helper import create_empty_board, board_state
 import math
@@ -116,13 +116,12 @@ def po(board, current_row, current_col, code, coords):
 
 @next_candidates_for(PieceType.Byung, PieceType.Jol)
 def byung(board, current_row, current_col, code, coords):
-    name = code2name(code)
     dmoves = []
-    if name.startswith('Byung'):
+    if code == Piece.Byung_a:
         dmoves = [xs[0] for xs in
                   diagonal_moves.get((current_row, current_col), ())
                   if xs[0][0] >= current_row]
-    elif name.startswith('Jol'):
+    elif code == Piece.Jol_b:
         dmoves = [xs[0] for xs in
                   diagonal_moves.get((current_row, current_col), ())
                   if xs[0][0] <= current_row]
