@@ -10,6 +10,7 @@ from tkinter import Button, Label, Canvas
 from ..core.data import Piece, A_INITIAL_STATE, B_INITIAL_STATE
 from ..core.janggi import Janggi
 from ..core.rule import next_coordinates
+from ..core.formation import FormationType, get_A_formation, get_B_formation
 
 HORIZONTAL_LINES = 10
 VERTICAL_LINES = 9
@@ -76,7 +77,9 @@ class JanggiBoard:
         self.board_state = Janggi(
             lambda x: self.update_canvas(),
             turn_change_callback=self.on_turn_changed)
-        self.board_state.reset(A_INITIAL_STATE, B_INITIAL_STATE)
+        self.board_state.reset(
+            get_A_formation(FormationType.LeftSang),
+            get_B_formation(FormationType.LeftSang))
 
     def init_gui(self):
         self.canvas.grid(row=0, column=0, rowspan=3)
