@@ -77,15 +77,15 @@ class JanggiBoard:
         self.board_state = Janggi(
             lambda x: self.update_canvas(),
             turn_change_callback=self.on_turn_changed)
-        self.board_state.reset(
-            get_A_formation(FormationType.LeftSang),
-            get_B_formation(FormationType.LeftSang))
 
-    def init_gui(self):
+    def init_gui(self, formation_a, formation_b):
         self.canvas.grid(row=0, column=0, rowspan=3)
         self.turn_0_label.grid(row=0, column=1)
         self.change_turn_button.grid(row=1, column=1)
         self.turn_1_label.grid(row=2, column=1)
+        self.board_state.reset(
+            get_A_formation(getattr(FormationType, formation_a.title() + 'Sang')),
+            get_B_formation(getattr(FormationType, formation_b.title() + 'Sang')))
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
