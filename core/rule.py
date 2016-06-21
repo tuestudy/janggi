@@ -116,7 +116,18 @@ def po(board, current_row, current_col, code, coords):
 
 @next_candidates_for(PieceType.Byung, PieceType.Jol)
 def byung(board, current_row, current_col, code, coords):
-    for r, c in coords:
+    name = code2name(code)
+    dmoves = []
+    if name.startswith('Byung'):
+        dmoves = [xs[0] for xs in
+                  diagonal_moves.get((current_row, current_col), ())
+                  if xs[0][0] >= current_row]
+    elif name.startswith('Jol'):
+        dmoves = [xs[0] for xs in
+                  diagonal_moves.get((current_row, current_col), ())
+                  if xs[0][0] <= current_row]
+
+    for r, c in coords + dmoves:
         if is_possible(board, r, c, code):
             yield r, c
 

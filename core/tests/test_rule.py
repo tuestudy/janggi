@@ -337,7 +337,7 @@ def test_sang():
     ''')
 
 
-def test_job_in_palace():
+def test_jol_in_palace():
     check_mobility(r'''
         ...XXX...
         ...XoX...  o=Jol_b
