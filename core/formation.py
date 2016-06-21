@@ -52,7 +52,7 @@ CHO_INITIAL_STATE = [
 ]
 
 
-def get_han_formation(formation_type):
+def get_A_formation(formation_type):
     formation = list(HAN_INITIAL_STATE)
     if formation_type == FormationType.OutsideSang: # 상마마상
         formation[1] = (0, 1, Piece.Sang_a)
@@ -68,7 +68,7 @@ def get_han_formation(formation_type):
     return formation                                # 마상상마
 
 
-def get_cho_formation(formation_type):
+def get_B_formation(formation_type):
     formation = list(CHO_INITIAL_STATE)
     if formation_type == FormationType.OutsideSang: # 상마마상
         formation[1] = (9, 1, Piece.Sang_b)

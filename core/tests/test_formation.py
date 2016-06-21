@@ -1,6 +1,6 @@
 import janggi
 from data import Piece
-from formation import FormationType, get_han_formation, get_cho_formation
+from formation import FormationType, get_A_formation, get_B_formation
 
 
 def check_inside_sang(turn, board):
@@ -57,54 +57,54 @@ def check_right_sang(turn, board):
 
 def test_inside_sang_formation_both():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.InsideSang),
-            get_cho_formation(FormationType.InsideSang))
+    j.reset(get_A_formation(FormationType.InsideSang),
+            get_B_formation(FormationType.InsideSang))
     check_inside_sang('a', j.board)
     check_inside_sang('b', j.board)
 
 
 def test_outside_sang_formation_both():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.OutsideSang),
-            get_cho_formation(FormationType.OutsideSang))
+    j.reset(get_A_formation(FormationType.OutsideSang),
+            get_B_formation(FormationType.OutsideSang))
     check_outside_sang('a', j.board)
     check_outside_sang('b', j.board)
 
 
 def test_inside_sang_x_outside_sang_formation():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.InsideSang),
-            get_cho_formation(FormationType.OutsideSang))
+    j.reset(get_A_formation(FormationType.InsideSang),
+            get_B_formation(FormationType.OutsideSang))
     check_inside_sang('a', j.board)
     check_outside_sang('b', j.board)
 
 
 def test_left_sang_formation_both():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.LeftSang),
-            get_cho_formation(FormationType.LeftSang))
+    j.reset(get_A_formation(FormationType.LeftSang),
+            get_B_formation(FormationType.LeftSang))
     check_left_sang('a', j.board)
     check_left_sang('b', j.board)
 
 
 def test_right_sang_formation_both():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.RightSang),
-            get_cho_formation(FormationType.RightSang))
+    j.reset(get_A_formation(FormationType.RightSang),
+            get_B_formation(FormationType.RightSang))
     check_right_sang('a', j.board)
     check_right_sang('b', j.board)
 
 
 def test_left_sang_x_right_sang_formation_both():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.LeftSang),
-            get_cho_formation(FormationType.RightSang))
+    j.reset(get_A_formation(FormationType.LeftSang),
+            get_B_formation(FormationType.RightSang))
     check_left_sang('a', j.board)
     check_right_sang('b', j.board)
 
 def test_right_sang_x_left_sang_formation_both():
     j = janggi.Janggi(None)
-    j.reset(get_han_formation(FormationType.RightSang),
-            get_cho_formation(FormationType.LeftSang))
+    j.reset(get_A_formation(FormationType.RightSang),
+            get_B_formation(FormationType.LeftSang))
     check_right_sang('a', j.board)
     check_left_sang('b', j.board)
