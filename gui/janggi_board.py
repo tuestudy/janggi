@@ -7,7 +7,7 @@ from collections import namedtuple
 from PIL import ImageTk, Image
 from tkinter import Button, Label, Canvas
 
-from ..core.data import Piece, A_INITIAL_STATE, B_INITIAL_STATE
+from ..core.data import Piece
 from ..core.janggi import Janggi
 from ..core.rule import next_coordinates
 from ..core.formation import FormationType, get_A_formation, get_B_formation
