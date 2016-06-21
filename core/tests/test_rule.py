@@ -151,6 +151,7 @@ def test_cha_at_palace_center():
         .../X\...
     ''')
 
+
 def test_cha_in_palace():
     check_mobility(r'''
         ...\|X...

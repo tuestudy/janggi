@@ -1,4 +1,4 @@
-#-*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 import enum
 from data import Piece
@@ -8,6 +8,7 @@ from data import Piece
 #   * right_sang 오른상차림
 #   * inside_sang 안상차림  (default)
 #   * outside_sang 바깥상차림
+
 
 class FormationType(enum.IntEnum):
     InsideSang, OutsideSang, LeftSang, RightSang = range(4)
@@ -59,6 +60,7 @@ def get_han_formation(formation_type):
         formation[5] = (0, 6, Piece.Ma_a)
         formation[6] = (0, 7, Piece.Sang_a)
     return formation
+
 
 def get_cho_formation(formation_type):
     formation = list(CHO_INITIAL_STATE)

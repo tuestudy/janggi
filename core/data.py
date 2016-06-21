@@ -1,4 +1,4 @@
-#-*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 import enum
 
 MAX_ROW = 9
@@ -10,13 +10,16 @@ MAX_COL = 8
   * B 가 하단(Row 가 큰 쪽) 楚
 """
 
+
 class PieceType(enum.IntEnum):
     Kung, Cha, Po, Ma, Sang, Sa, Byung, Jol = range(1, 9)
+
 
 class Piece(enum.IntEnum):
     __ = 0
     Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Byung_a = range(1, 8)
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
+
     @property
     def score(self):
         return self.piece_type.score
@@ -52,15 +55,18 @@ Piece.Sa_b.piece_type = PieceType.Sa
 
 assert len(CODE_NAMES) == 7 + 7 + 1
 
+
 def is_valid_code(c):
     try:
         Piece(c)
         return True
     except ValueError:
         return False
- 
+
+
 def is_valid_coordinates(r, c):
     return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
+
 
 def code2name(c):
     try:
@@ -68,6 +74,7 @@ def code2name(c):
         return name.replace('_', '-') if c else name
     except ValueError:
         return 'X'
+
 
 def name2code(name):
     return getattr(Piece, name.replace('-', '_')).value
@@ -112,37 +119,35 @@ B_INITIAL_STATE = [
 ]
 
 MOVES = {
-    PieceType.Kung : [
-        (-1, -1), (-1,  0), (-1,  1),
-        ( 0, -1),           ( 0,  1),
-        ( 1,  1), ( 1,  0), ( 1, -1)
-              ],
-    PieceType.Sa   : [
-        (-1, -1), (-1,  0), (-1,  1),
-        ( 0, -1),           ( 0,  1),
-        ( 1,  1), ( 1,  0), ( 1, -1)
-              ],
-    PieceType.Sang : [
-            (-3, -2), (-3,  2),
-        (-2, -3),        (-2,  3),
-        ( 2, -3),        ( 2,  3),
-            ( 3, -2), ( 3,  2)
-              ],
-    PieceType.Ma   : [
-            (-1, -2), (-1,  2),
-        (-2, -1),        (-2,  1),
-        ( 1, -2),        ( 1,  2),
-            ( 2, -1), ( 2,  1)
-              ],
+    PieceType.Kung: [
+        (-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, 1), (1, 0), (1, -1)
+    ],
+    PieceType.Sa: [
+        (-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, 1), (1, 0), (1, -1)
+    ],
+    PieceType.Sang: [
+        (-3, -2), (-3, 2),
+        (-2, -3), (-2, 3),
+        (2, -3), (2, 3),
+        (3, -2), (3, 2)
+    ],
+    PieceType.Ma: [
+        (-1, -2), (-1, 2),
+        (-2, -1), (-2, 1),
+        (1, -2), (1, 2),
+        (2, -1), (2, 1)
+    ],
     PieceType.Byung: [
-                  ( 1,  0),
-        ( 0, -1),            ( 0,  1)
-              ],
-    PieceType.Jol:   [
-                  (-1,  0),
-        ( 0, -1),            ( 0,  1)
-              ]
+        (1, 0),
+        (0, -1), (0, 1)
+    ],
+    PieceType.Jol: [
+        (-1, 0),
+        (0, -1), (0, 1)
+    ],
 }
 MOVES = {pt.name: moves for pt, moves in MOVES.items()}
-
-

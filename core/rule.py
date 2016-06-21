@@ -9,18 +9,19 @@ import math
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
 
 diagonal_moves = {
-    (0,3): [[(1,4),(2,5)]],
-    (0,5): [[(1,4),(2,3)]],
-    (1,4): [[(0,3)], [(0,5)], [(2,3)], [(2,5)]],
-    (2,3): [[(1,4),(0,5)]],
-    (2,5): [[(1,4),(0,3)]],
+    (0, 3): [[(1, 4), (2, 5)]],
+    (0, 5): [[(1, 4), (2, 3)]],
+    (1, 4): [[(0, 3)], [(0, 5)], [(2, 3)], [(2, 5)]],
+    (2, 3): [[(1, 4), (0, 5)]],
+    (2, 5): [[(1, 4), (0, 3)]],
 
-    (7,3): [[(8,4),(9,5)]],
-    (7,5): [[(8,4),(9,3)]],
-    (8,4): [[(7,3)], [(7,5)], [(9,3)], [(9,5)]],
-    (9,3): [[(8,4),(7,5)]],
-    (9,5): [[(8,4),(7,3)]],
+    (7, 3): [[(8, 4), (9, 5)]],
+    (7, 5): [[(8, 4), (9, 3)]],
+    (8, 4): [[(7, 3)], [(7, 5)], [(9, 3)], [(9, 5)]],
+    (9, 3): [[(8, 4), (7, 5)]],
+    (9, 5): [[(8, 4), (7, 3)]],
 }
+
 
 def sorted_coord(coords, origin):
     def distance(dest):
@@ -84,9 +85,9 @@ def ma_sang(board, current_row, current_col, code, coords):
         ci = 1 if c < current_col else -1
         ok = True
         for i in range(0, step):
-            if i != 0 and board[r+ri*i][c+ci*i] != 0:
+            if i != 0 and board[r + ri * i][c + ci * i] != 0:
                 ok = False
-            elif not is_possible(board, r+ri*i, c+ci*i, code):
+            elif not is_possible(board, r + ri * i, c + ci * i, code):
                 ok = False
         if ok:
             yield r, c
@@ -140,10 +141,10 @@ def next_possible_coordinates(board, current_row, current_col, code):
 
 
 def cha_next_possible_coordinates(row, col):
-    for r in range(0, MAX_ROW+1):
+    for r in range(0, MAX_ROW + 1):
         if r != row:
             yield r, col
-    for c in range(0, MAX_COL+1):
+    for c in range(0, MAX_COL + 1):
         if c != col:
             yield row, c
     for xs in diagonal_moves.get((row, col), ()):
@@ -156,7 +157,7 @@ def po_next_possible_coordinates(board, row, col):
         return code2name(code).startswith('Po')
 
     blocked = False
-    for r in range(row+1, MAX_ROW+1):
+    for r in range(row + 1, MAX_ROW + 1):
         if _isPo(board[r][col]):
             break
         if not blocked and board[r][col] != 0:
@@ -168,7 +169,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for r in range(row-1, 0-1, -1):
+    for r in range(row - 1, -1, -1):
         if _isPo(board[r][col]):
             break
         if not blocked and board[r][col] != 0:
@@ -180,7 +181,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for c in range(col+1, MAX_COL+1):
+    for c in range(col + 1, MAX_COL + 1):
         if _isPo(board[row][c]):
             break
         if not blocked and board[row][c] != 0:
@@ -192,7 +193,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for c in range(col-1, 0-1, -1):
+    for c in range(col - 1, -1, -1):
         if _isPo(board[row][c]):
             break
         if not blocked and board[row][c] != 0:
