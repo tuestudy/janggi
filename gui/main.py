@@ -5,7 +5,7 @@ from tkinter import Tk
 from .janggi_board import JanggiBoard
 import sys
 
-formations = ['left', 'right', 'inside', 'right']
+formations = ['left', 'right', 'inside', 'outside']
 
 def check_arguments(argv):
     return ((len(sys.argv) == 3)

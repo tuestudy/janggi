@@ -84,8 +84,8 @@ class JanggiBoard:
         self.change_turn_button.grid(row=1, column=1)
         self.turn_1_label.grid(row=2, column=1)
         self.board_state.reset(
-            get_A_formation(getattr(FormationType, formation_a.title() + 'Sang')),
-            get_B_formation(getattr(FormationType, formation_b.title() + 'Sang')))
+            get_A_formation(FormationType[formation_a.title() + 'Sang']),
+            get_B_formation(FormationType[formation_b.title() + 'Sang']))
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
