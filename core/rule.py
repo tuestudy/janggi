@@ -1,5 +1,5 @@
 from data import (
-    code2name, name2code, MAX_ROW, MAX_COL,
+    name2code, MAX_ROW, MAX_COL,
     is_valid_coordinates, MOVES,
     Piece, PieceType,
 )
@@ -73,11 +73,10 @@ def cha(board, current_row, current_col, code, coords):
 
 @next_candidates_for(PieceType.Ma, PieceType.Sang)
 def ma_sang(board, current_row, current_col, code, coords):
-    name = code2name(code)
     step = 0
-    if name.startswith('Ma'):
+    if code.piece_type == PieceType.Ma:
         step = 2
-    elif name.startswith('Sang'):
+    elif code.piece_type == PieceType.Sang:
         step = 3
 
     for r, c in coords:
@@ -141,13 +140,12 @@ def next_coordinates(board, current_row, current_col, code):
 
 def next_possible_coordinates(board, current_row, current_col, code):
     assert(is_valid_coordinates(current_row, current_col))
-    name = code2name(code)
-    if name.startswith('Cha'):
+    if code.piece_type == PieceType.Cha:
         return cha_next_possible_coordinates(current_row, current_col)
-    elif name.startswith('Po'):
+    elif code.piece_type == PieceType.Po:
         return po_next_possible_coordinates(board, current_row, current_col)
     else:
-        return item_next_possible_coordinates(name, current_row, current_col)
+        return item_next_possible_coordinates(code.piece_type.name, current_row, current_col)
 
 
 def cha_next_possible_coordinates(row, col):
@@ -164,7 +162,7 @@ def cha_next_possible_coordinates(row, col):
 
 def po_next_possible_coordinates(board, row, col):
     def _isPo(code):
-        return code2name(code).startswith('Po')
+        return code and code.piece_type == PieceType.Po
 
     blocked = False
     for r in range(row + 1, MAX_ROW + 1):
