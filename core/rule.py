@@ -145,7 +145,8 @@ def next_possible_coordinates(board, current_row, current_col, code):
     elif code.piece_type == PieceType.Po:
         return po_next_possible_coordinates(board, current_row, current_col)
     else:
-        return item_next_possible_coordinates(code.piece_type.name, current_row, current_col)
+        return item_next_possible_coordinates(
+            code.piece_type.name, current_row, current_col)
 
 
 def cha_next_possible_coordinates(row, col):

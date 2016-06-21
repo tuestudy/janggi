@@ -102,6 +102,7 @@ def test_left_sang_x_right_sang_formation_both():
     check_left_sang('a', j.board)
     check_right_sang('b', j.board)
 
+
 def test_right_sang_x_left_sang_formation_both():
     j = janggi.Janggi(None)
     j.reset(get_A_formation(FormationType.RightSang),
