@@ -8,22 +8,31 @@ import sys
 formations = ['left', 'right', 'inside', 'right']
 
 def check_arguments(argv):
-    if len(sys.argv) != 3:
-        return False
-    return (sys.argv[1] in formations) and (sys.argv[2] in formations)
+    return ((len(sys.argv) == 3)
+            and (sys.argv[1] in formations)
+            and (sys.argv[2] in formations))
 
-if check_arguments(sys.argv):
-    root = Tk()
+def print_usage():
+    print("사용법: ./run.sh [formation1] [formation2]")
+    print("   formation1: 한나라의 상차림")
+    print("   formation2: 초나라의 상차림")
+    print("   상자림 유형: [left|right|inside|outside]")
 
-    root.title(u'조선장기')
-    root.bind('<Escape>', lambda e: root.quit())
-
-    b = JanggiBoard(root)
-    b.init_gui(sys.argv[1], sys.argv[2])
-
-    root.mainloop()
+if len(sys.argv) == 1:
+    print("상차림이 지정되지 않았습니다. 기본 상차림을 사용합니다.")
+    a = b = 'left'
+elif check_arguments(sys.argv):
+    a, b = sys.argv[1], sys.argv[2]
 else:
-    print("Usage: ./run.sh formation1 formation2")
-    print("   formation1: formation for a(han, red)")
-    print("   formation2: formation for b(cho, blue)")
-    print("   formation type: [left|right|inside|outside]")
+    print_usage()
+    sys.exit()
+
+root = Tk()
+
+root.title(u'조선장기')
+root.bind('<Escape>', lambda e: root.quit())
+
+board = JanggiBoard(root)
+board.init_gui(a, b)
+
+root.mainloop()
