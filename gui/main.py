@@ -7,10 +7,12 @@ import sys
 
 formations = ['left', 'right', 'inside', 'outside']
 
+
 def check_arguments(argv):
-    return ((len(sys.argv) == 3)
-            and (sys.argv[1] in formations)
-            and (sys.argv[2] in formations))
+    return (len(sys.argv) == 3
+            and sys.argv[1] in formations
+            and sys.argv[2] in formations)
+
 
 def print_usage():
     print("사용법: ./run.sh [formation1] [formation2]")
