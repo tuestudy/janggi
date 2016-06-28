@@ -1,6 +1,7 @@
 # coding: utf-8
 import janggi
-from data import Piece, A_INITIAL_STATE, B_INITIAL_STATE
+from formation import get_A_formation, get_B_formation
+from data import Piece
 
 
 def test_initial_board():
@@ -14,7 +15,7 @@ def test_initial_board_with_change_callback():
     def change_callback(board):
         assert True
     j = janggi.Janggi(change_callback)
-    j.reset(A_INITIAL_STATE, B_INITIAL_STATE)
+    j.reset(get_A_formation(), get_B_formation())
     assert len(j.board) == 10
     assert j.on_changed == change_callback
 
@@ -33,6 +34,6 @@ def test_turn():
 
 def test_score():
     j = janggi.Janggi()
-    j.reset(A_INITIAL_STATE, B_INITIAL_STATE)
+    j.reset(get_A_formation(), get_B_formation())
     assert j.score('a') == 72 + 1.5
     assert j.score('b') == 72

@@ -13,7 +13,7 @@ from data import Piece
 class FormationType(enum.IntEnum):
     InsideSang, OutsideSang, LeftSang, RightSang = range(4)
 
-HAN_INITIAL_STATE = [
+A_INITIAL_STATE = [
     (0, 0, Piece.Cha_a),
     (0, 1, Piece.Ma_a),
     (0, 2, Piece.Sang_a),
@@ -32,7 +32,7 @@ HAN_INITIAL_STATE = [
     (3, 8, Piece.Byung_a),
 ]
 
-CHO_INITIAL_STATE = [
+B_INITIAL_STATE = [
     (9, 0, Piece.Cha_b),
     (9, 1, Piece.Ma_b),
     (9, 2, Piece.Sang_b),
@@ -52,33 +52,37 @@ CHO_INITIAL_STATE = [
 ]
 
 
-def get_A_formation(formation_type):
-    formation = list(HAN_INITIAL_STATE)
+def get_formation(formation_type, init_state, turn):
+    formation = list(init_state)
+    if turn == 'a':
+        baseline = 0
+        sang = Piece.Sang_a
+        ma = Piece.Ma_a
+    else:
+        baseline = 9
+        sang = Piece.Sang_b
+        ma = Piece.Ma_b
     if formation_type == FormationType.OutsideSang:  # 상마마상
-        formation[1] = (0, 1, Piece.Sang_a)
-        formation[2] = (0, 2, Piece.Ma_a)
-        formation[5] = (0, 6, Piece.Ma_a)
-        formation[6] = (0, 7, Piece.Sang_a)
-    elif formation_type == FormationType.LeftSang:   # ∇
-        formation[5] = (0, 6, Piece.Ma_a)            # 마상마상
-        formation[6] = (0, 7, Piece.Sang_a)
-    elif formation_type == FormationType.RightSang:  # ∇
-        formation[1] = (0, 1, Piece.Sang_a)          # 상마상마
-        formation[2] = (0, 2, Piece.Ma_a)
-    return formation                                 # 마상상마
+        formation[1] = (baseline, 1, sang)
+        formation[2] = (baseline, 2, ma)
+        formation[5] = (baseline, 6, ma)
+        formation[6] = (baseline, 7, sang)
+    elif ((turn == 'a' and formation_type == FormationType.LeftSang)        # 상마상마
+        or (turn == 'b' and formation_type == FormationType.RightSang)):    # 마상마상
+        formation[5] = (baseline, 6, ma)
+        formation[6] = (baseline, 7, sang)
+    elif ((turn == 'a' and formation_type == FormationType.RightSang)       # 마상마상
+        or (turn == 'b' and formation_type == FormationType.LeftSang)):     # 상마상마
+        formation[1] = (baseline, 1, sang)
+        formation[2] = (baseline, 2, ma)
+    return formation    # 마상마상
 
 
-def get_B_formation(formation_type):
-    formation = list(CHO_INITIAL_STATE)
-    if formation_type == FormationType.OutsideSang:  # 상마마상
-        formation[1] = (9, 1, Piece.Sang_b)
-        formation[2] = (9, 2, Piece.Ma_b)
-        formation[5] = (9, 6, Piece.Ma_b)
-        formation[6] = (9, 7, Piece.Sang_b)
-    elif formation_type == FormationType.LeftSang:   # 상마상마
-        formation[1] = (9, 1, Piece.Sang_b)          # ∆
-        formation[2] = (9, 2, Piece.Ma_b)
-    elif formation_type == FormationType.RightSang:  # 마상마상
-        formation[5] = (9, 6, Piece.Ma_b)            # ∆
-        formation[6] = (9, 7, Piece.Sang_b)
-    return formation                                 # 마상상마
+def get_A_formation(formation_type=FormationType.InsideSang):
+    if formation_type == None:
+        return A_INITIAL_STATE
+    return get_formation(formation_type, A_INITIAL_STATE, 'a')
+
+
+def get_B_formation(formation_type=FormationType.InsideSang):
+    return get_formation(formation_type, B_INITIAL_STATE, 'b')
