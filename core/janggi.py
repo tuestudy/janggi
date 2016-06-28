@@ -62,12 +62,6 @@ class Janggi(object):
         self.board[row1][col1] = EMPTY
         self.change_turn()
 
-    @broadcasted
-    def delete(self, pos):
-        assert self.exist(pos)
-        row, col = pos
-        self.board[row][col] = EMPTY
-
     def score(self, player):
         s = sum(piece.score
                 for row in self.board
