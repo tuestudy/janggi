@@ -67,20 +67,18 @@ def get_formation(formation_type, init_state, turn):
         formation[2] = (baseline, 2, ma)
         formation[5] = (baseline, 6, ma)
         formation[6] = (baseline, 7, sang)
-    elif ((turn == 'a' and formation_type == FormationType.LeftSang)        # 상마상마
-        or (turn == 'b' and formation_type == FormationType.RightSang)):    # 마상마상
+    elif ((turn == 'a' and formation_type == FormationType.LeftSang)
+          or (turn == 'b' and formation_type == FormationType.RightSang)):
         formation[5] = (baseline, 6, ma)
         formation[6] = (baseline, 7, sang)
-    elif ((turn == 'a' and formation_type == FormationType.RightSang)       # 마상마상
-        or (turn == 'b' and formation_type == FormationType.LeftSang)):     # 상마상마
+    elif ((turn == 'a' and formation_type == FormationType.RightSang)
+          or (turn == 'b' and formation_type == FormationType.LeftSang)):
         formation[1] = (baseline, 1, sang)
         formation[2] = (baseline, 2, ma)
     return formation    # 마상마상
 
 
 def get_A_formation(formation_type=FormationType.InsideSang):
-    if formation_type == None:
-        return A_INITIAL_STATE
     return get_formation(formation_type, A_INITIAL_STATE, 'a')
 
 
