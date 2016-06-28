@@ -12,7 +12,12 @@ MAX_COL = 8
 
 
 class PieceType(enum.IntEnum):
-    Kung, Cha, Po, Ma, Sang, Sa, Byung, Jol = range(1, 9)
+    Kung, Cha, Po, Ma, Sang, Sa, Jol = range(1, 8)
+
+    @property
+    def piece_type(self):
+        # XXX
+        return self
 
 PieceType.Kung.score = 0
 PieceType.Cha.score = 13
@@ -20,12 +25,12 @@ PieceType.Po.score = 7
 PieceType.Ma.score = 5
 PieceType.Sang.score = 3
 PieceType.Sa.score = 3
-PieceType.Byung.score = PieceType.Jol.score = 2
+PieceType.Jol.score = 2
 
 
 class Piece(enum.IntEnum):
     __ = 0
-    Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Byung_a = range(1, 8)
+    Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Jol_a = range(1, 8)
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
 
     @property
@@ -93,13 +98,12 @@ MOVES = {
         (1, -2), (1, 2),
         (2, -1), (2, 1)
     ],
-    PieceType.Byung: [
-        (1, 0),
-        (0, -1), (0, 1)
-    ],
-    PieceType.Jol: [
+    Piece.Jol_b: [
         (-1, 0),
         (0, -1), (0, 1)
     ],
+    Piece.Jol_a: [
+        (1, 0),
+        (0, -1), (0, 1)
+    ],
 }
-MOVES = {pt.name: moves for pt, moves in MOVES.items()}

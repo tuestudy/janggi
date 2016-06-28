@@ -113,10 +113,10 @@ def po(board, current_row, current_col, code, coords):
             yield r, c
 
 
-@next_candidates_for(PieceType.Byung, PieceType.Jol)
+@next_candidates_for(PieceType.Jol)
 def byung(board, current_row, current_col, code, coords):
     dmoves = []
-    if code == Piece.Byung_a:
+    if code == Piece.Jol_a:
         dmoves = [xs[0] for xs in
                   diagonal_moves.get((current_row, current_col), ())
                   if xs[0][0] >= current_row]
@@ -146,7 +146,7 @@ def next_possible_coordinates(board, current_row, current_col, code):
         return po_next_possible_coordinates(board, current_row, current_col)
     else:
         return item_next_possible_coordinates(
-            code.piece_type.name, current_row, current_col)
+            code, current_row, current_col)
 
 
 def cha_next_possible_coordinates(row, col):
@@ -227,8 +227,9 @@ def po_next_possible_coordinates(board, row, col):
                     break
 
 
-def item_next_possible_coordinates(name, row, col):
-    for r, c in MOVES[name.split('-')[0]]:
+def item_next_possible_coordinates(piece, row, col):
+    moves = MOVES.get(piece) or MOVES.get(piece.piece_type)
+    for r, c in moves:
         if is_valid_coordinates(row + r, col + c):
             yield row + r, col + c
 
@@ -257,12 +258,12 @@ if __name__ == '__main__':
         board[r][c] = 100
     print(board_state(board))
 
-    byung_code = name2code('Byung-a')
+    byung_code = name2code('Jol-a')
     jol_code = name2code('Jol-b')
     board = create_empty_board()
     board[2][2] = byung_code
     board[6][2] = jol_code
-    update_possible_coordinates(board, 'Byung-a', 2, 2, byung_code)
+    update_possible_coordinates(board, 'Jol-a', 2, 2, byung_code)
     update_possible_coordinates(board, 'Jol-b', 6, 2, jol_code)
     print(board_state(board))
 

@@ -25,11 +25,11 @@ A_INITIAL_STATE = [
     (1, 4, Piece.Kung_a),
     (2, 1, Piece.Po_a),
     (2, 7, Piece.Po_a),
-    (3, 0, Piece.Byung_a),
-    (3, 2, Piece.Byung_a),
-    (3, 4, Piece.Byung_a),
-    (3, 6, Piece.Byung_a),
-    (3, 8, Piece.Byung_a),
+    (3, 0, Piece.Jol_a),
+    (3, 2, Piece.Jol_a),
+    (3, 4, Piece.Jol_a),
+    (3, 6, Piece.Jol_a),
+    (3, 8, Piece.Jol_a),
 ]
 
 B_INITIAL_STATE = [

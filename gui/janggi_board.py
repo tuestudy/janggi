@@ -34,7 +34,7 @@ images = {
     Piece.Ma_b: 'Green_Ma',
     Piece.Sang_a: 'Red_Sang',
     Piece.Sang_b: 'Green_Sang',
-    Piece.Byung_a: 'Red_Byung',
+    Piece.Jol_a: 'Red_Jol',
     Piece.Jol_b: 'Green_Zol',
     Piece.Sa_a: 'Red_Sa',
     Piece.Sa_b: 'Green_Sa',
