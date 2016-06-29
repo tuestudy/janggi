@@ -3,6 +3,7 @@
 from tkinter import Tk
 
 from .janggi_board import JanggiBoard
+from ..core.formation import FormationType
 import sys
 
 formations = ['left', 'right', 'inside', 'outside']
@@ -22,7 +23,7 @@ def print_usage():
 
 if len(sys.argv) == 1:
     print("상차림이 지정되지 않았습니다. 기본 상차림을 사용합니다.")
-    a = b = 'left'
+    a = b = FormationType.Default.name
 elif check_arguments(sys.argv):
     a, b = sys.argv[1], sys.argv[2]
 else:

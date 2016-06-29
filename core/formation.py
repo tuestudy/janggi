@@ -48,6 +48,8 @@ def parse(spec) -> Tuple[Tuple[Row, Col],
 
 class FormationType(enum.IntEnum):
     InsideSang, OutsideSang, LeftSang, RightSang = range(4)
+    inside, outside, left, right = range(4)
+    Default = left
 
 
 initial_states = {
@@ -86,7 +88,7 @@ baselines = {
 }
 
 
-def get_formation(team, formation_type=FormationType.InsideSang):
+def get_formation(team, formation_type=FormationType.Default):
     baseline = baselines[team]
     layout = sang_ma_layouts[team][formation_type]
     return initial_states[team] + [
