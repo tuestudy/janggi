@@ -13,18 +13,12 @@ from data import Piece
 class FormationType(enum.IntEnum):
     InsideSang, OutsideSang, LeftSang, RightSang = range(4)
 
-In, Out, Left, Right = FormationType
-
 
 initial_states = {
     'a': [
         (0, 0, Piece.Cha_a),
-        (0, 1, Piece.Ma_a),
-        (0, 2, Piece.Sang_a),
         (0, 3, Piece.Sa_a),
         (0, 5, Piece.Sa_a),
-        (0, 6, Piece.Sang_a),
-        (0, 7, Piece.Ma_a),
         (0, 8, Piece.Cha_a),
         (1, 4, Piece.Kung_a),
         (2, 1, Piece.Po_a),
@@ -37,12 +31,8 @@ initial_states = {
     ],
     'b': [
         (9, 0, Piece.Cha_b),
-        (9, 1, Piece.Ma_b),
-        (9, 2, Piece.Sang_b),
         (9, 3, Piece.Sa_b),
         (9, 5, Piece.Sa_b),
-        (9, 6, Piece.Sang_b),
-        (9, 7, Piece.Ma_b),
         (9, 8, Piece.Cha_b),
         (8, 4, Piece.Kung_b),
         (7, 1, Piece.Po_b),
@@ -55,6 +45,7 @@ initial_states = {
     ]
 }
 
+In, Out, Left, Right = FormationType
 sang_ma_layouts = {
     'a': {
         Out:   [Piece.Sang_a, Piece.Ma_a, Piece.Ma_a, Piece.Sang_a],
@@ -79,7 +70,6 @@ baselines = {
 def get_formation(team, formation_type=FormationType.InsideSang):
     baseline = baselines[team]
     layout = sang_ma_layouts[team][formation_type]
-    formation = list(initial_states[team])
-    for i, j, piece in zip((1, 2, 5, 6), (1, 2, 6, 7), layout):
-        formation[i] = baseline, j, piece
-    return formation
+    return initial_states[team] + [
+        (baseline, col, piece) for col, piece in zip((1, 2, 6, 7), layout)
+    ]
