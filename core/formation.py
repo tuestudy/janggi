@@ -2,6 +2,39 @@
 
 import enum
 from data import Piece
+from typing import List, Tuple, Set
+
+
+Row = Col = int
+
+
+def parse(spec) -> Tuple[Tuple[Row, Col],
+                         List[Tuple[Row, Col, Piece]],
+                         Set[Tuple[Row, Col]]]:
+    rows = [row for row in spec.strip().splitlines()]
+    board = [row.split()[0] for row in rows]
+    piece_mapping = {}
+    for row in rows:
+        for m in row.split()[1:]:
+            *chars, name = m.split('=')
+            p = getattr(Piece, name)
+            for char in chars:
+                piece_mapping[char] = p
+    pos = None
+    pieces = []
+    movable_coords = set()
+    for i, row in enumerate(board):
+        for j, x in enumerate(row):
+            p = piece_mapping.get(x, 0)
+            if p:
+                pieces.append((i, j, p))
+            if x == 'o':
+                assert not pos, 'o should be specified once'
+                pos = i, j
+            elif x.isupper():
+                movable_coords.add((i, j))
+    return pos, pieces, movable_coords
+
 
 # Formation
 #   * left_sang 왼상차림, 상마상마

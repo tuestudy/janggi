@@ -2,6 +2,7 @@ import pytest
 
 from data import Piece
 from janggi import Janggi
+from formation import parse
 from rule import next_coordinates, next_possible_coordinates
 
 
@@ -38,30 +39,12 @@ def check_mobility(spec):
         줄바꿈  - 행구분
         c=Cha_a - 사용된 문자와 기물 매핑
     """
-
-    rows = [row for row in spec.strip().splitlines()]
-    board = [row.split()[0] for row in rows]
-    piece_mapping = {}
-    for row in rows:
-        for m in row.split()[1:]:
-            *chars, name = m.split('=')
-            p = getattr(Piece, name)
-            for char in chars:
-                piece_mapping[char] = p
-    janggi = Janggi()
-    pos = piece = None
-    expected_coords = set()
-    for i, row in enumerate(board):
-        for j, x in enumerate(row):
-            p = piece_mapping.get(x, 0)
-            if x == 'o':
-                assert not pos, 'o should be specified once'
-                pos = i, j
-                piece = p
-            elif x.isupper():
-                expected_coords.add((i, j))
-            janggi.board[i][j] = p
+    pos, pieces, expected_coords = parse(spec)
     assert pos, 'o should be specified once'
+    janggi = Janggi()
+    for i, j, p in pieces:
+        janggi.board[i][j] = p
+    piece = janggi.board[pos[0]][pos[1]]
     coords = set(next_coordinates(janggi.board, *pos, piece))
     assert coords == expected_coords
 
