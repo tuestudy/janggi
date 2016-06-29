@@ -10,7 +10,7 @@ from tkinter import Button, Label, Canvas
 from ..core.data import Piece
 from ..core.janggi import Janggi
 from ..core.rule import next_coordinates
-from ..core.formation import FormationType, get_A_formation, get_B_formation
+from ..core.formation import FormationType, get_formation
 
 HORIZONTAL_LINES = 10
 VERTICAL_LINES = 9
@@ -84,8 +84,8 @@ class JanggiBoard:
         self.change_turn_button.grid(row=1, column=1)
         self.turn_1_label.grid(row=2, column=1)
         self.board_state.reset(
-            get_A_formation(FormationType[formation_a.title() + 'Sang']),
-            get_B_formation(FormationType[formation_b.title() + 'Sang']))
+            get_formation('a', FormationType[formation_a.title() + 'Sang']),
+            get_formation('b', FormationType[formation_b.title() + 'Sang']))
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
