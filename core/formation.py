@@ -13,6 +13,8 @@ from data import Piece
 class FormationType(enum.IntEnum):
     InsideSang, OutsideSang, LeftSang, RightSang = range(4)
 
+In, Out, Left, Right = FormationType
+
 
 initial_states = {
     'a': [
@@ -53,21 +55,21 @@ initial_states = {
     ]
 }
 
-
 sang_ma_layouts = {
     'a': {
-        FormationType.OutsideSang: [Piece.Sang_a, Piece.Ma_a, Piece.Ma_a, Piece.Sang_a],
-        FormationType.InsideSang: [Piece.Ma_a, Piece.Sang_a, Piece.Sang_a, Piece.Ma_a],
-        FormationType.RightSang: [Piece.Sang_a, Piece.Ma_a, Piece.Sang_a, Piece.Ma_a],
-        FormationType.LeftSang: [Piece.Ma_a, Piece.Sang_a, Piece.Ma_a, Piece.Sang_a],
+        Out:   [Piece.Sang_a, Piece.Ma_a, Piece.Ma_a, Piece.Sang_a],
+        In:    [Piece.Ma_a, Piece.Sang_a, Piece.Sang_a, Piece.Ma_a],
+        Right: [Piece.Sang_a, Piece.Ma_a, Piece.Sang_a, Piece.Ma_a],
+        Left:  [Piece.Ma_a, Piece.Sang_a, Piece.Ma_a, Piece.Sang_a],
     },
     'b': {
-        FormationType.OutsideSang: [Piece.Sang_b, Piece.Ma_b, Piece.Ma_b, Piece.Sang_b],
-        FormationType.InsideSang: [Piece.Ma_b, Piece.Sang_b, Piece.Sang_b, Piece.Ma_b],
-        FormationType.RightSang: [Piece.Ma_b, Piece.Sang_b, Piece.Ma_b, Piece.Sang_b],
-        FormationType.LeftSang: [Piece.Sang_b, Piece.Ma_b, Piece.Sang_b, Piece.Ma_b],
+        Out:   [Piece.Sang_b, Piece.Ma_b, Piece.Ma_b, Piece.Sang_b],
+        In:    [Piece.Ma_b, Piece.Sang_b, Piece.Sang_b, Piece.Ma_b],
+        Right: [Piece.Ma_b, Piece.Sang_b, Piece.Ma_b, Piece.Sang_b],
+        Left:  [Piece.Sang_b, Piece.Ma_b, Piece.Sang_b, Piece.Ma_b],
     },
 }
+
 baselines = {
     'a': 0,
     'b': 9,
