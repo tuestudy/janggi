@@ -11,6 +11,9 @@ Row = Col = int
 def parse(spec) -> Tuple[Tuple[Row, Col],
                          List[Tuple[Row, Col, Piece]],
                          Set[Tuple[Row, Col]]]:
+    spec = spec.strip()
+    if spec[0].isdigit():
+        spec = '\n'.join(['.........'] * int(spec[0])) + spec[1:]
     rows = [row for row in spec.strip().splitlines()]
     board = [row.split()[0] for row in rows]
     piece_mapping = {}
@@ -48,34 +51,17 @@ class FormationType(enum.IntEnum):
 
 
 initial_states = {
-    'a': [
-        (0, 0, Piece.Cha_a),
-        (0, 3, Piece.Sa_a),
-        (0, 5, Piece.Sa_a),
-        (0, 8, Piece.Cha_a),
-        (1, 4, Piece.Kung_a),
-        (2, 1, Piece.Po_a),
-        (2, 7, Piece.Po_a),
-        (3, 0, Piece.Jol_a),
-        (3, 2, Piece.Jol_a),
-        (3, 4, Piece.Jol_a),
-        (3, 6, Piece.Jol_a),
-        (3, 8, Piece.Jol_a),
-    ],
-    'b': [
-        (9, 0, Piece.Cha_b),
-        (9, 3, Piece.Sa_b),
-        (9, 5, Piece.Sa_b),
-        (9, 8, Piece.Cha_b),
-        (8, 4, Piece.Kung_b),
-        (7, 1, Piece.Po_b),
-        (7, 7, Piece.Po_b),
-        (6, 0, Piece.Jol_b),
-        (6, 2, Piece.Jol_b),
-        (6, 4, Piece.Jol_b),
-        (6, 6, Piece.Jol_b),
-        (6, 8, Piece.Jol_b),
-    ]
+    'a': parse('''
+        c..s.s..c  c=Cha_a s=Sa_a
+        ....k....  k=Kung_a
+        .p.....p.  p=Po_a
+        j.j.j.j.j  j=Jol_a''')[1],
+    'b': parse('''
+        6
+        j.j.j.j.j  j=Jol_b
+        .p.....p.  p=Po_b
+        ....k....  k=Kung_b
+        c..s.s..c  c=Cha_b s=Sa_b''')[1],
 }
 
 In, Out, Left, Right = FormationType
