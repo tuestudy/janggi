@@ -1,2 +1,2 @@
 SET PYTHONPATH=core
-py.test -s
+py.test -s %*
