@@ -34,6 +34,8 @@ root = Tk()
 
 root.title(u'조선장기')
 root.bind('<Escape>', lambda e: root.quit())
+root.wm_attributes("-topmost", 1)
+root.after(1000, root.wm_attributes, "-topmost", 0)
 
 board = JanggiBoard(root)
 board.init_gui(a, b)
