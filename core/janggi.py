@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+from collections import defaultdict
 from helper import create_empty_board, board_state
 from rule import next_coordinates
 
@@ -23,6 +24,7 @@ class Janggi(object):
         self.on_turn_changed = turn_change_callback
         self.turn = 'b'  # b(楚) -> a(漢) -> b -> a -> ..
         self.first_mover = self.turn
+        self.team_pieces = defaultdict(list)
 
     def __repr__(self):
         return board_state(self.board)
@@ -35,8 +37,11 @@ class Janggi(object):
         row, col = pos
         return self.board[row][col] != EMPTY
 
+    def other_team(self):
+        return {'a': 'b', 'b': 'a'}[self.turn]
+
     def change_turn(self):
-        self.turn = {'a': 'b', 'b': 'a'}[self.turn]
+        self.turn = self.other_team()
         if self.on_turn_changed:
             self.on_turn_changed(self.turn)
 
@@ -46,8 +51,13 @@ class Janggi(object):
     @broadcasted
     def reset(self, han_formation, cho_formation):
         self.board = create_empty_board()
-        for row, col, code in han_formation + cho_formation:
+        for row, col, code in han_formation:
             self.board[row][col] = code
+            self.team_pieces['a'].append(code)
+
+        for row, col, code in cho_formation:
+            self.board[row][col] = code
+            self.team_pieces['b'].append(code)
 
     @broadcasted
     def move(self, old_pos, new_pos):
@@ -58,6 +68,12 @@ class Janggi(object):
         row2, col2 = new_pos
         code = self.board[row1][col1]
         assert(new_pos in next_coordinates(self.board, row1, col1, code))
+        print('move', old_pos, new_pos, code)
+
+        if self.board[row2][col2] != EMPTY:
+            print('bye bye', self.board[row2][col2])
+            self.team_pieces[self.other_team()].remove(self.board[row2][col2])
+
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
         self.change_turn()

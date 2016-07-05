@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import random
+
 from math import hypot
 from pathlib import Path
 from collections import namedtuple
@@ -115,6 +117,7 @@ class JanggiBoard:
 
     def put_pieces(self):
         d = self.pieces = {}  # Map canvas item -> PieceInfo(row, col, piece)
+        self.items = {}
         for i, row in enumerate(self.board_state.board):
             for j, piece in enumerate(row):
                 if not piece:
@@ -125,6 +128,7 @@ class JanggiBoard:
                     image=self.photoimages[piece],
                     tags='piece')
                 d[item] = PieceInfo(row=i, col=j, name=piece, item=item)
+                self.items[piece] = d[item]
 
     def update_canvas(self):
         self.current_piece = None
@@ -164,12 +168,26 @@ class JanggiBoard:
         self.board_state.change_turn()
 
     def on_turn_changed(self, turn):
-        if turn == 'a':
-            self.turn_0_label.configure(bg=self.label_colors[turn])
-            self.turn_1_label.configure(bg=self.label_colors['default'])
-        else:
-            self.turn_0_label.configure(bg=self.label_colors['default'])
-            self.turn_1_label.configure(bg=self.label_colors[turn])
+        def _fun():
+            if turn == 'a':
+                self.turn_0_label.configure(bg=self.label_colors[turn])
+                self.turn_1_label.configure(bg=self.label_colors['default'])
+            else:
+                self.turn_0_label.configure(bg=self.label_colors['default'])
+                self.turn_1_label.configure(bg=self.label_colors[turn])
+
+            candidates = []
+            while not candidates:
+                pieces = self.board_state.team_pieces[turn]
+                row, col, piece, pi = self.items[random.choice(pieces)]
+                candidates = next_coordinates(self.board_state.board, row, col, piece)
+                if not self.board_state.exist((row, col)):
+                    candidates = []
+
+            new_pos = random.choice(candidates)
+            self.board_state.move((row, col), new_pos)
+
+        self.canvas.after(250, _fun)
 
     def show_candidates(self, e):
         r, c, p, pi = self.current_piece
