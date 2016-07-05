@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+from data import PieceType
 from helper import create_empty_board, board_state
 from rule import next_coordinates
 
@@ -17,12 +18,16 @@ class Janggi(object):
     def __init__(
             self,
             change_callback=None,
-            turn_change_callback=None):
+            turn_change_callback=None,
+            gameover_callback=None):
         self.board = [[EMPTY] * 9 for _ in range(10)]
         self.on_changed = change_callback
         self.on_turn_changed = turn_change_callback
+        self.on_gameover = gameover_callback
         self.turn = 'b'  # b(楚) -> a(漢) -> b -> a -> ..
         self.first_mover = self.turn
+        self.gameover = False
+        self.last_position = None
 
     def __repr__(self):
         return board_state(self.board)
@@ -30,6 +35,8 @@ class Janggi(object):
     def broadcast(self):
         if self.on_changed is not None:
             self.on_changed(self.board)
+        if self.gameover and self.on_gameover:
+            self.on_gameover(self.last_position, self.turn)
 
     def exist(self, pos):
         row, col = pos
@@ -58,6 +65,11 @@ class Janggi(object):
         row2, col2 = new_pos
         code = self.board[row1][col1]
         assert(new_pos in next_coordinates(self.board, row1, col1, code))
+        if (self.board[row2][col2] and
+                self.board[row2][col2].piece_type == PieceType.Kung):
+            self.gameover = True
+            self.last_position = row2, col2
+        self.last_handle_postion = new_pos
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
         self.change_turn()
