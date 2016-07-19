@@ -33,14 +33,13 @@ pip install -r requirements.txt
 \*NIX:
 
 ```
-./run.sh formation1 formation2
-   formation1: formation for a(han, red)
-   formation2: formation for b(cho, blue)
-   formation type: [left|right|inside|outside]
+./run.sh
+./run.sh -h
 ```
 
 Windows:
 
 ```
 run.bat
+run.bat -h
 ```
