@@ -54,8 +54,7 @@ class JanggiBoard:
         }
         for name in ['boom', 'red_win', 'green_win']:
             self.photoimages[name] = ImageTk.PhotoImage(Image.open(
-                resource_dir / (name + '.png')
-            ).convert('RGB'))  # XXX  ImageTk가 RGBA이미지 처리 못하는듯
+                resource_dir / (name + '.png')))
         self.canvas = Canvas(
             master=master,
             width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
