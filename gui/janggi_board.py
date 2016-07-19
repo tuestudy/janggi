@@ -52,6 +52,10 @@ class JanggiBoard:
             ).resize((60, 54)))
             for piece, filename in images.items()
         }
+        for name in ['boom', 'red_win', 'green_win']:
+            self.photoimages[name] = ImageTk.PhotoImage(Image.open(
+                resource_dir / (name + '.png')
+            ).convert('RGB'))  # XXX  ImageTk가 RGBA이미지 처리 못하는듯
         self.canvas = Canvas(
             master=master,
             width=CANVAS_HEIGHT, height=CANVAS_HEIGHT,
@@ -76,7 +80,8 @@ class JanggiBoard:
         self.canvas.bind('<Button1-Motion>', self.on_button_motion)
         self.board_state = Janggi(
             lambda x: self.update_canvas(),
-            turn_change_callback=self.on_turn_changed)
+            turn_change_callback=self.on_turn_changed,
+            gameover_callback=self.on_gameover)
 
     def init_gui(self, formation_a, formation_b):
         self.canvas.grid(row=0, column=0, rowspan=3)
@@ -170,6 +175,21 @@ class JanggiBoard:
         else:
             self.turn_0_label.configure(bg=self.label_colors['default'])
             self.turn_1_label.configure(bg=self.label_colors[turn])
+
+    def on_gameover(self, last_kung_pos, loser):
+        i, j = last_kung_pos
+        self._gameover_image = self.canvas.create_image(
+            MARGIN_LEFT + j * CELL_SIZE,
+            MARGIN_TOP + i * CELL_SIZE,
+            image=self.photoimages['boom'])
+        if loser == 'a':
+            win_image = 'green_win'
+        else:
+            win_image = 'red_win'
+        self._gameover_image = self.canvas.create_image(
+            MARGIN_LEFT + 4 * CELL_SIZE,
+            MARGIN_TOP + 5 * CELL_SIZE,
+            image=self.photoimages[win_image])
 
     def show_candidates(self, e):
         r, c, p, pi = self.current_piece
