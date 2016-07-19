@@ -16,13 +16,14 @@ parser.add_argument(
     '-b', '--green-formation', choices=formations, type=str,
     default='inside', help='한 상차림')
 parser.add_argument(
-    '-c', '--custom-formation', type=argparse.FileType('r'),
+    '-c', '--custom-formation', metavar='file path',
+    type=argparse.FileType('r'),
     help='custom formation - specify file path')
 
 args = parser.parse_args()
 if args.custom_formation:
     f = args.custom_formation
-    args.custome_formation = f.read()
+    args.custom_formation = f.read()
     f.close()
 
 root = Tk()
