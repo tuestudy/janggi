@@ -1,0 +1,10 @@
+c..s.s..c  c=Cha_a s=Sa_a
+....k....  k=Kung_a
+.p..J..p.  p=Po_a
+j.j...j.j  j=Jol_a
+.........
+.........
+J.J...J.J  J=Jol_b
+.P..j..P.  P=Po_b
+....K....  K=Kung_b
+C..S.S..C  C=Cha_b S=Sa_b

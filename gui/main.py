@@ -15,8 +15,15 @@ parser.add_argument(
 parser.add_argument(
     '-b', '--green-formation', choices=formations, type=str,
     default='inside', help='한 상차림')
+parser.add_argument(
+    '-c', '--custom-formation', type=argparse.FileType('r'),
+    help='custom formation - specify file path')
 
 args = parser.parse_args()
+if args.custom_formation:
+    f = args.custom_formation
+    args.custome_formation = f.read()
+    f.close()
 
 root = Tk()
 
@@ -26,6 +33,6 @@ root.wm_attributes("-topmost", 1)
 root.after(1000, root.wm_attributes, "-topmost", 0)
 
 board = JanggiBoard(root)
-board.init_gui(args.red_formation, args.green_formation)
+board.init_gui(args.red_formation, args.green_formation, args.custom_formation)
 
 root.mainloop()

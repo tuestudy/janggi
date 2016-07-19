@@ -10,7 +10,7 @@ from tkinter import Button, Label, Canvas
 from ..core.data import Piece
 from ..core.janggi import Janggi
 from ..core.rule import next_coordinates
-from ..core.formation import FormationType, get_formation
+from ..core.formation import FormationType, get_formation, parse
 
 HORIZONTAL_LINES = 10
 VERTICAL_LINES = 9
@@ -83,14 +83,18 @@ class JanggiBoard:
             turn_change_callback=self.on_turn_changed,
             gameover_callback=self.on_gameover)
 
-    def init_gui(self, formation_a, formation_b):
+    def init_gui(self, formation_a, formation_b, customer_formation):
         self.canvas.grid(row=0, column=0, rowspan=3)
         self.turn_0_label.grid(row=0, column=1)
         self.change_turn_button.grid(row=1, column=1)
         self.turn_1_label.grid(row=2, column=1)
-        self.board_state.reset(
-            get_formation('a', FormationType[formation_a]),
-            get_formation('b', FormationType[formation_b]))
+        if customer_formation:
+            _, formation, _ = parse(customer_formation)
+            self.board_state.reset(formation, [])
+        else:
+            self.board_state.reset(
+                get_formation('a', FormationType[formation_a]),
+                get_formation('b', FormationType[formation_b]))
 
     def draw_hlines(self):
         for i in range(HORIZONTAL_LINES):
