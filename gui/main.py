@@ -1,34 +1,22 @@
 # coding: utf-8
 
+import argparse
 from tkinter import Tk
 
 from .janggi_board import JanggiBoard
-from ..core.formation import FormationType
-import sys
 
 formations = ['left', 'right', 'inside', 'outside']
 
 
-def check_arguments(argv):
-    return (len(sys.argv) == 3
-            and sys.argv[1] in formations
-            and sys.argv[2] in formations)
+parser = argparse.ArgumentParser(description='조선장기')
+parser.add_argument(
+    '-a', '--red-formation', choices=formations, type=str,
+    default='inside', help='초 상차림')
+parser.add_argument(
+    '-b', '--green-formation', choices=formations, type=str,
+    default='inside', help='한 상차림')
 
-
-def print_usage():
-    print("사용법: ./run.sh [formation1] [formation2]")
-    print("   formation1: 한나라의 상차림")
-    print("   formation2: 초나라의 상차림")
-    print("   상자림 유형: [left|right|inside|outside]")
-
-if len(sys.argv) == 1:
-    print("상차림이 지정되지 않았습니다. 기본 상차림을 사용합니다.")
-    a = b = FormationType.Default.name
-elif check_arguments(sys.argv):
-    a, b = sys.argv[1], sys.argv[2]
-else:
-    print_usage()
-    sys.exit()
+args = parser.parse_args()
 
 root = Tk()
 
@@ -38,6 +26,6 @@ root.wm_attributes("-topmost", 1)
 root.after(1000, root.wm_attributes, "-topmost", 0)
 
 board = JanggiBoard(root)
-board.init_gui(a, b)
+board.init_gui(args.red_formation, args.green_formation)
 
 root.mainloop()
