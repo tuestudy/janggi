@@ -51,14 +51,6 @@ CODE_NAMES = [p.name.replace('_', '-') if p else p.name for p in Piece]
 assert len(CODE_NAMES) == 7 + 7 + 1
 
 
-def is_valid_code(c):
-    try:
-        Piece(c)
-        return True
-    except ValueError:
-        return False
-
-
 def is_valid_coordinates(r, c):
     return 0 <= r < NUM_ROW and 0 <= c < NUM_COL
 
