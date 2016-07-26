@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-from data import Piece, PieceType
+from data import Piece, PieceType, NUM_ROW, NUM_COL
 from helper import board_state
 from rule import next_coordinates
 
@@ -54,7 +54,7 @@ class Janggi(object):
         return piece.team == self.turn
 
     def clear(self):
-        self.board = [[Piece.Empty] * 9 for _ in range(10)]
+        self.board = [[Piece.Empty] * NUM_COL for _ in range(NUM_ROW)]
 
     @broadcasted
     def reset(self, han_formation, cho_formation):

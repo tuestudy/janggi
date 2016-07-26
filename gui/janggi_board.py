@@ -7,13 +7,13 @@ from collections import namedtuple
 from PIL import ImageTk, Image
 from tkinter import Button, Label, Canvas
 
-from ..core.data import Piece
+from ..core.data import Piece, NUM_ROW, NUM_COL
 from ..core.janggi import Janggi
 from ..core.rule import next_coordinates
 from ..core.formation import FormationType, get_formation, parse
 
-HORIZONTAL_LINES = 10
-VERTICAL_LINES = 9
+HORIZONTAL_LINES = NUM_ROW
+VERTICAL_LINES = NUM_COL
 MARGIN_TOP = MARGIN_LEFT = 50
 CELL_SIZE = 50
 BOARD_WIDTH = CELL_SIZE * (VERTICAL_LINES - 1)

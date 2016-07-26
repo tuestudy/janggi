@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 import enum
 
-MAX_ROW = 9
-MAX_COL = 8
+NUM_ROW = 10
+NUM_COL = 9
 
 """
   졸/병이 움직이는 방향을 정할 때 진영 정보가 필요함
@@ -60,7 +60,7 @@ def is_valid_code(c):
 
 
 def is_valid_coordinates(r, c):
-    return 0 <= r <= MAX_ROW and 0 <= c <= MAX_COL
+    return 0 <= r < NUM_ROW and 0 <= c < NUM_COL
 
 
 def code2name(c):

@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 import enum
-from data import Piece
+from data import Piece, NUM_ROW
 from typing import List, Tuple, Set
 
 
@@ -84,7 +84,7 @@ sang_ma_layouts = {
 
 baselines = {
     'a': 0,
-    'b': 9,
+    'b': NUM_ROW - 1,
 }
 
 

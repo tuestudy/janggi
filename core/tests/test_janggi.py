@@ -3,13 +3,13 @@ from unittest.mock import Mock
 
 import janggi
 from formation import get_formation
-from data import Piece
+from data import Piece, NUM_ROW, NUM_COL
 
 
 def test_initial_board():
     j = janggi.Janggi()
-    assert len(j.board) == 10
-    assert all(row == [0] * 9 for row in j.board)
+    assert len(j.board) == NUM_ROW
+    assert all(row == [Piece.Empty] * NUM_COL for row in j.board)
     assert j.on_changed is None
 
 
@@ -18,7 +18,7 @@ def test_initial_board_with_change_callback():
         assert True
     j = janggi.Janggi(change_callback)
     j.reset(get_formation('a'), get_formation('b'))
-    assert len(j.board) == 10
+    assert len(j.board) == NUM_ROW
     assert j.on_changed == change_callback
 
 

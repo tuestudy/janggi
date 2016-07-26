@@ -1,5 +1,5 @@
 from data import (
-    MAX_ROW, MAX_COL,
+    NUM_ROW, NUM_COL,
     is_valid_coordinates, MOVES,
     Piece, PieceType,
 )
@@ -149,10 +149,10 @@ def next_possible_coordinates(board, current_row, current_col, code):
 
 
 def cha_next_possible_coordinates(row, col):
-    for r in range(0, MAX_ROW + 1):
+    for r in range(NUM_ROW):
         if r != row:
             yield r, col
-    for c in range(0, MAX_COL + 1):
+    for c in range(NUM_COL):
         if c != col:
             yield row, c
     for xs in diagonal_moves.get((row, col), ()):
@@ -165,7 +165,7 @@ def po_next_possible_coordinates(board, row, col):
         return code and code.piece_type == PieceType.Po
 
     blocked = False
-    for r in range(row + 1, MAX_ROW + 1):
+    for r in range(row + 1, NUM_ROW):
         if _isPo(board[r][col]):
             break
         if not blocked and board[r][col]:
@@ -189,7 +189,7 @@ def po_next_possible_coordinates(board, row, col):
                 break
 
     blocked = False
-    for c in range(col + 1, MAX_COL + 1):
+    for c in range(col + 1, NUM_COL):
         if _isPo(board[row][c]):
             break
         if not blocked and board[row][c]:
