@@ -12,7 +12,7 @@ MAX_COL = 8
 
 
 class PieceType(enum.IntEnum):
-    Kung, Cha, Po, Ma, Sang, Sa, Jol = range(1, 8)
+    Empty, Kung, Cha, Po, Ma, Sang, Sa, Jol = range(0, 8)
 
     @property
     def piece_type(self):
@@ -29,7 +29,7 @@ PieceType.Jol.score = 2
 
 
 class Piece(enum.IntEnum):
-    __ = 0
+    Empty = 0
     Kung_a, Cha_a, Po_a, Ma_a, Sang_a, Sa_a, Jol_a = range(1, 8)
     Kung_b, Cha_b, Po_b, Ma_b, Sang_b, Sa_b, Jol_b = range(8, 15)
 

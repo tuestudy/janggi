@@ -67,7 +67,7 @@ def cha(board, current_row, current_col, code, coords):
         for r, c in coord:
             if is_possible(board, r, c, code):
                 yield r, c
-            if board[r][c] != 0:
+            if board[r][c]:
                 break
 
 
@@ -84,7 +84,7 @@ def ma_sang(board, current_row, current_col, code, coords):
         ci = 1 if c < current_col else -1
         ok = True
         for i in range(0, step):
-            if i != 0 and board[r + ri * i][c + ci * i] != 0:
+            if i != 0 and board[r + ri * i][c + ci * i]:
                 ok = False
             elif not is_possible(board, r + ri * i, c + ci * i, code):
                 ok = False
@@ -169,48 +169,48 @@ def po_next_possible_coordinates(board, row, col):
     for r in range(row + 1, MAX_ROW + 1):
         if _isPo(board[r][col]):
             break
-        if not blocked and board[r][col] != 0:
+        if not blocked and board[r][col]:
             blocked = True
             continue
         if blocked:
             yield r, col
-            if board[r][col] != 0:
+            if board[r][col]:
                 break
 
     blocked = False
     for r in range(row - 1, -1, -1):
         if _isPo(board[r][col]):
             break
-        if not blocked and board[r][col] != 0:
+        if not blocked and board[r][col]:
             blocked = True
             continue
         if blocked:
             yield r, col
-            if board[r][col] != 0:
+            if board[r][col]:
                 break
 
     blocked = False
     for c in range(col + 1, MAX_COL + 1):
         if _isPo(board[row][c]):
             break
-        if not blocked and board[row][c] != 0:
+        if not blocked and board[row][c]:
             blocked = True
             continue
         if blocked:
             yield row, c
-            if board[row][c] != 0:
+            if board[row][c]:
                 break
 
     blocked = False
     for c in range(col - 1, -1, -1):
         if _isPo(board[row][c]):
             break
-        if not blocked and board[row][c] != 0:
+        if not blocked and board[row][c]:
             blocked = True
             continue
         if blocked:
             yield row, c
-            if board[row][c] != 0:
+            if board[row][c]:
                 break
 
     for xs in diagonal_moves.get((row, col), ()):
@@ -218,12 +218,12 @@ def po_next_possible_coordinates(board, row, col):
         for r, c in xs:
             if _isPo(board[r][c]):
                 break
-            if not blocked and board[r][c] != 0:
+            if not blocked and board[r][c]:
                 blocked = True
                 continue
             if blocked:
                 yield r, c
-                if board[r][c] != 0:
+                if board[r][c]:
                     break
 
 

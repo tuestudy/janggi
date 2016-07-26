@@ -1,9 +1,7 @@
 # -*- encoding: utf-8 -*-
-from data import PieceType
-from helper import create_empty_board, board_state
+from data import Piece, PieceType
+from helper import board_state
 from rule import next_coordinates
-
-EMPTY = 0
 
 
 def broadcasted(func, ):
@@ -20,7 +18,7 @@ class Janggi(object):
             change_callback=None,
             turn_change_callback=None,
             gameover_callback=None):
-        self.board = [[EMPTY] * 9 for _ in range(10)]
+        self.clear()
         self.on_changed = change_callback
         self.on_turn_changed = turn_change_callback
         self.on_gameover = gameover_callback
@@ -41,7 +39,7 @@ class Janggi(object):
 
     def exist(self, pos):
         row, col = pos
-        return self.board[row][col] != EMPTY
+        return self.board[row][col]
 
     def change_turn(self):
         self.turn = {'a': 'b', 'b': 'a'}[self.turn]
@@ -55,9 +53,12 @@ class Janggi(object):
     def can_move(self, piece):
         return piece.team == self.turn
 
+    def clear(self):
+        self.board = [[Piece.Empty] * 9 for _ in range(10)]
+
     @broadcasted
     def reset(self, han_formation, cho_formation):
-        self.board = create_empty_board()
+        self.clear()
         for row, col, code in han_formation + cho_formation:
             self.board[row][col] = code
 
@@ -70,14 +71,13 @@ class Janggi(object):
         row2, col2 = new_pos
         code = self.board[row1][col1]
         assert(new_pos in next_coordinates(self.board, row1, col1, code))
-        if (self.board[row2][col2] and
-                self.board[row2][col2].piece_type == PieceType.Kung):
+        if self.board[row2][col2].piece_type == PieceType.Kung:
             self.gameover = True
             self.last_position = row2, col2
             self.winner = self.turn
         self.last_handle_postion = new_pos
         self.board[row2][col2] = self.board[row1][col1]
-        self.board[row1][col1] = EMPTY
+        self.board[row1][col1] = Piece.Empty
         if self.gameover:
             self.game_over()
         else:

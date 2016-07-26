@@ -144,7 +144,7 @@ class JanggiBoard:
 
     def get_current_piece(self):
         item = self.canvas.find_withtag('current')
-        if len(item) == 0:
+        if not item:
             return None
         if 'piece' not in self.canvas.gettags(item[0]):
             return None
@@ -220,9 +220,9 @@ class JanggiBoard:
             return hypot((e.x - x1), (e.y - y1))
         old_pos = (self.current_piece.row, self.current_piece.col)
         candidates = self.canvas.find_withtag('candidate')
-        if len(candidates) != 0:
+        if candidates:
             c = min(candidates, key=_distance)
-            new_pos = (self.candidates[c] if (_distance(c) < CELL_SIZE) else
+            new_pos = (self.candidates[c] if _distance(c) < CELL_SIZE else
                        old_pos)
         else:
             new_pos = old_pos
