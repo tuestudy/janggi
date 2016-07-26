@@ -81,6 +81,7 @@ class JanggiBoard:
             lambda x: self.update_canvas(),
             turn_change_callback=self.on_turn_changed,
             gameover_callback=self.on_gameover)
+        self.gameover = False
 
     def init_gui(self, formation_a, formation_b, customer_formation):
         self.canvas.grid(row=0, column=0, rowspan=3)
@@ -179,20 +180,23 @@ class JanggiBoard:
             self.turn_0_label.configure(bg=self.label_colors['default'])
             self.turn_1_label.configure(bg=self.label_colors[turn])
 
-    def on_gameover(self, last_kung_pos, loser):
+    def on_gameover(self, last_kung_pos, winner):
         i, j = last_kung_pos
         self._gameover_image = self.canvas.create_image(
             MARGIN_LEFT + j * CELL_SIZE,
             MARGIN_TOP + i * CELL_SIZE,
             image=self.photoimages['boom'])
-        if loser == 'a':
-            win_image = 'green_win'
-        else:
+        if winner == 'a':
             win_image = 'red_win'
+        else:
+            win_image = 'green_win'
         self._gameover_image = self.canvas.create_image(
             MARGIN_LEFT + 4 * CELL_SIZE,
             MARGIN_TOP + 5 * CELL_SIZE,
             image=self.photoimages[win_image])
+        self.canvas.unbind('<Button-1>')
+        self.canvas.unbind('<ButtonRelease-1>')
+        self.canvas.unbind('<Button1-Motion>')
 
     def show_candidates(self, e):
         r, c, p, pi = self.current_piece

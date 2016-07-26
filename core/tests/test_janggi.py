@@ -48,7 +48,7 @@ def test_gameover_callback():
     j.board[2][4] = Piece.Jol_b
     j.move((2, 4), (1, 4))
     assert gameover_callback.called
-    gameover_callback.assert_called_with((1, 4), 'a')
+    gameover_callback.assert_called_with((1, 4), 'b')
 
 
 def test_gameover_callback_shoult_not_be_called_unless_game_is_over():

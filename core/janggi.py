@@ -27,6 +27,7 @@ class Janggi(object):
         self.turn = 'b'  # b(楚) -> a(漢) -> b -> a -> ..
         self.first_mover = self.turn
         self.gameover = False
+        self.winner = None
         self.last_position = None
 
     def __repr__(self):
@@ -36,7 +37,7 @@ class Janggi(object):
         if self.on_changed is not None:
             self.on_changed(self.board)
         if self.gameover and self.on_gameover:
-            self.on_gameover(self.last_position, self.turn)
+            self.on_gameover(self.last_position, self.winner)
 
     def exist(self, pos):
         row, col = pos
@@ -46,6 +47,10 @@ class Janggi(object):
         self.turn = {'a': 'b', 'b': 'a'}[self.turn]
         if self.on_turn_changed:
             self.on_turn_changed(self.turn)
+
+    def game_over(self):
+        if self.on_gameover:
+            self.on_gameover(self.last_position, self.winner)
 
     def can_move(self, piece):
         return piece.team == self.turn
@@ -69,10 +74,14 @@ class Janggi(object):
                 self.board[row2][col2].piece_type == PieceType.Kung):
             self.gameover = True
             self.last_position = row2, col2
+            self.winner = self.turn
         self.last_handle_postion = new_pos
         self.board[row2][col2] = self.board[row1][col1]
         self.board[row1][col1] = EMPTY
-        self.change_turn()
+        if self.gameover:
+            self.game_over()
+        else:
+            self.change_turn()
 
     def score(self, player):
         s = sum(piece.score
