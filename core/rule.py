@@ -33,7 +33,7 @@ def is_enemy(board, r, c, code):
 
 
 def is_possible(board, r, c, code):
-    return board[r][c] == 0 or is_enemy(board, r, c, code)
+    return board[r][c] == Piece.Empty or is_enemy(board, r, c, code)
 
 
 coordinates_funcs = {}
