@@ -1,9 +1,8 @@
 from data import (
-    name2code, MAX_ROW, MAX_COL,
+    MAX_ROW, MAX_COL,
     is_valid_coordinates, MOVES,
     Piece, PieceType,
 )
-from helper import create_empty_board, board_state
 import math
 
 # 판이 비어있다고 가정하고, 현재 위치와 기물을 받아서 다음에 갈 수 있는 위치 목록을 리턴
@@ -240,73 +239,3 @@ def update_possible_coordinates(board, name, row, col, code):
     ))
     for r, c in next_possible_coordinates(board, row, col, code):
         board[r][c] = 100
-
-if __name__ == '__main__':
-    cha_code = name2code('Cha-a')
-    board = create_empty_board()
-    board[1][1] = cha_code
-    print("Cha can go to those coordinates from 1, 1: ")
-    for r, c in next_possible_coordinates(board, 1, 1, cha_code):
-        board[r][c] = 100
-    print(board_state(board))
-
-    po_code = name2code('Po-a')
-    board = create_empty_board()
-    board[2][2] = po_code
-    print("Po can go to those coordinates from 2, 2: ")
-    for r, c in next_possible_coordinates(board, 2, 2, po_code):
-        board[r][c] = 100
-    print(board_state(board))
-
-    byung_code = name2code('Jol-a')
-    jol_code = name2code('Jol-b')
-    board = create_empty_board()
-    board[2][2] = byung_code
-    board[6][2] = jol_code
-    update_possible_coordinates(board, 'Jol-a', 2, 2, byung_code)
-    update_possible_coordinates(board, 'Jol-b', 6, 2, jol_code)
-    print(board_state(board))
-
-    ma_a_code = name2code('Ma-a')
-    ma_b_code = name2code('Ma-b')
-    board = create_empty_board()
-    board[0][1] = ma_a_code
-    board[0][7] = ma_a_code
-    board[9][1] = ma_b_code
-    board[9][7] = ma_b_code
-    update_possible_coordinates(board, 'Ma-a', 0, 1, ma_a_code)
-    update_possible_coordinates(board, 'Ma-a', 0, 7, ma_a_code)
-    update_possible_coordinates(board, 'Ma-a', 9, 1, ma_b_code)
-    update_possible_coordinates(board, 'Ma-a', 9, 7, ma_b_code)
-    print(board_state(board))
-
-    sang_a_code = name2code('Sang-a')
-    sang_b_code = name2code('Sang-b')
-    board = create_empty_board()
-    board[0][2] = sang_a_code
-    board[0][6] = sang_a_code
-    board[9][2] = sang_b_code
-    board[9][6] = sang_b_code
-    update_possible_coordinates(board, 'Sang-a', 0, 2, sang_a_code)
-    update_possible_coordinates(board, 'Sang-a', 0, 6, sang_a_code)
-    update_possible_coordinates(board, 'Sang-a', 9, 2, sang_b_code)
-    update_possible_coordinates(board, 'Sang-a', 9, 6, sang_b_code)
-    print(board_state(board))
-
-    kung_a_code = name2code('Kung-a')
-    kung_b_code = name2code('Kung-b')
-    board = create_empty_board()
-    board[1][4] = kung_a_code
-    board[8][4] = kung_b_code
-    update_possible_coordinates(board, 'Kung-a', 1, 4, kung_a_code)
-    update_possible_coordinates(board, 'Kung-b', 8, 4, kung_b_code)
-    print(board_state(board))
-
-    sa_a_code = name2code('Sa-a')
-    sa_b_code = name2code('Sa-b')
-    board = create_empty_board()
-    board[1][4] = sa_a_code
-    board[8][4] = sa_b_code
-    update_possible_coordinates(board, 'Sa-a', 1, 4, sa_a_code)
-    update_possible_coordinates(board, 'Sa-b', 8, 4, sa_b_code)
-    print(board_state(board))

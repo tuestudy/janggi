@@ -71,10 +71,6 @@ def code2name(c):
         return 'X'
 
 
-def name2code(name):
-    return getattr(Piece, name.replace('-', '_')).value
-
-
 MOVES = {
     PieceType.Kung: [
         (-1, -1), (-1, 0), (-1, 1),

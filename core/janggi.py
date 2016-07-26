@@ -92,13 +92,3 @@ class Janggi(object):
             # 후수자 덤
             s += 1.5
         return s
-
-if '__main__' == __name__:
-    def change_callback(board):
-        print(janggi)
-
-    janggi = Janggi(change_callback)
-    janggi.reset()
-
-    janggi.move((0, 0), (1, 0))
-    janggi.delete((1, 0))
