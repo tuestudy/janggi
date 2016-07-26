@@ -70,7 +70,7 @@ class Janggi(object):
         row1, col1 = old_pos
         row2, col2 = new_pos
         code = self.board[row1][col1]
-        assert(new_pos in next_coordinates(self.board, row1, col1, code))
+        assert new_pos in next_coordinates(self.board, row1, col1, code)
         if self.board[row2][col2].piece_type == PieceType.Kung:
             self.gameover = True
             self.last_position = row2, col2

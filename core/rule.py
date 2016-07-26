@@ -138,7 +138,7 @@ def next_coordinates(board, current_row, current_col, code):
 
 
 def next_possible_coordinates(board, current_row, current_col, code):
-    assert(is_valid_coordinates(current_row, current_col))
+    assert is_valid_coordinates(current_row, current_col)
     if code.piece_type == PieceType.Cha:
         return cha_next_possible_coordinates(current_row, current_col)
     elif code.piece_type == PieceType.Po:
